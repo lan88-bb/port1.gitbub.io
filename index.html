@@ -112,7 +112,6 @@
   .panel--video{ background:var(--moss); }
   .panel--photo{ background:var(--rose); }
 
-  /* ---- watermark glyph ---- */
   .panel__watermark{
     position:absolute;
     inset:0;
@@ -135,7 +134,6 @@
     opacity:0.05;
   }
 
-  /* ---- tab (collapsed label / always-visible rail) ---- */
   .panel__tab{
     flex:0 0 84px;
     display:flex;
@@ -146,6 +144,10 @@
     position:relative;
     z-index:2;
     height:100%;
+    background: transparent;
+    border: none;
+    color: inherit;
+    cursor: pointer;
   }
   .panel__index,
   .panel__arrow{
@@ -161,17 +163,17 @@
   .panel__arrow svg{ display:block; transition:transform .5s ease; }
   .panel.is-active .panel__arrow svg{ transform:rotate(135deg); }
 
+  /* 修复中文字体反转：去掉旋转，加入 text-orientation */
   .panel__label{
-    writing-mode:vertical-rl;
-    transform:rotate(180deg);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
     font-family:'Fraunces','Noto Serif SC',serif;
     font-weight:500;
     font-size:clamp(1rem, 1.35vw, 1.4rem);
-    letter-spacing:0.05em;
+    letter-spacing:0.1em;
     white-space:nowrap;
   }
 
-  /* ---- content ---- */
   .panel__content{
     flex:1 1 auto;
     min-width:0;
@@ -187,6 +189,7 @@
     opacity:0;
     transform:translateX(8px);
     transition:opacity .35s ease .1s, transform .5s ease .1s;
+    scroll-behavior: smooth;
   }
   .panel.is-active .content-inner{
     opacity:1;
@@ -220,109 +223,50 @@
     margin-bottom:32px;
     max-width:52ch;
   }
-  .section-sub em{
-    display:block;
-    font-style:normal;
-    font-family:'Inter','Noto Sans SC',sans-serif;
-    font-size:0.85rem;
-    margin-top:6px;
-    color:color-mix(in srgb, currentColor 45%, transparent);
-  }
 
-  /* ===================== About panel ===================== */
-  .about-role{
-    font-size:1.05rem;
-    margin-bottom:28px;
-    color:color-mix(in srgb, currentColor 75%, transparent);
-  }
-  .about-bio{
-    max-width:58ch;
-    font-size:1rem;
-    margin-bottom:8px;
-  }
-  .about-bio + .about-bio{
-    font-size:0.88rem;
-    color:color-mix(in srgb, currentColor 55%, transparent);
-    margin-bottom:36px;
-  }
-  .now-line{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    font-family:'JetBrains Mono',monospace;
-    font-size:0.78rem;
-    letter-spacing:0.08em;
-    text-transform:uppercase;
-    margin-bottom:36px;
-  }
-  .now-line .dot{
-    width:7px;height:7px;border-radius:50%;
-    background:var(--clay);
-    animation:pulse 2.6s ease-in-out infinite;
-  }
-  .chips{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:40px; max-width:520px; }
-  .chip{
-    font-family:'JetBrains Mono',monospace;
-    font-size:0.7rem;
-    letter-spacing:0.05em;
-    text-transform:uppercase;
-    padding:7px 14px;
-    border:1px solid color-mix(in srgb, currentColor 22%, transparent);
-    border-radius:100px;
-  }
-  .contact-list{
-    list-style:none;
-    display:flex;
-    flex-direction:column;
-    gap:0;
-    max-width:420px;
-  }
-  .contact-list li{
-    display:flex;
-    justify-content:space-between;
-    align-items:baseline;
-    padding:13px 0;
-    border-bottom:1px solid color-mix(in srgb, currentColor 12%, transparent);
-    font-size:0.92rem;
-  }
-  .contact-list li:first-child{ border-top:1px solid color-mix(in srgb, currentColor 12%, transparent); }
-  .contact-list .label{
-    font-family:'JetBrains Mono',monospace;
-    font-size:0.7rem;
-    letter-spacing:0.14em;
-    text-transform:uppercase;
-    color:color-mix(in srgb, currentColor 55%, transparent);
-  }
-
-  /* ===================== Cards ===================== */
+  /* ===================== Expandable Cards (平面设计) ===================== */
   .card-grid{
     display:grid;
     grid-template-columns:1fr;
     gap:28px;
-    max-width:720px;
+    max-width:800px;
   }
   .card{
     display:flex;
     flex-direction:column;
     border:1px solid color-mix(in srgb, currentColor 10%, transparent);
-    border-radius:4px;
-    overflow:hidden;
-    transition:transform .35s cubic-bezier(.22,.61,.36,1), box-shadow .35s ease;
+    border-radius:6px;
     background:color-mix(in srgb, currentColor 3%, transparent);
+    overflow:hidden;
   }
-  .card:hover, .card:focus-visible{
-    transform:translateY(-4px);
-    box-shadow:0 14px 28px -16px rgba(0,0,0,0.28);
+  /* 封面部分：点击触发 */
+  .card__cover {
+    cursor: pointer;
+    transition: transform .35s ease;
+  }
+  .card__cover:hover {
+    background: color-mix(in srgb, currentColor 5%, transparent);
   }
   .card__media{
     height:clamp(140px, 18vw, 220px);
     width:100%;
+    background-size: cover;
+    background-position: center;
   }
-  .card--a .card__media{ background:linear-gradient(135deg, var(--clay), var(--sand)); }
-  .card--b .card__media{ background:linear-gradient(135deg, var(--moss-deep), var(--moss)); }
-  .card--c .card__media{ background:linear-gradient(135deg, var(--ink), var(--clay)); }
-  .card--d .card__media{ background:linear-gradient(135deg, var(--slate), var(--rose)); }
-  .card__meta{ padding:18px 20px 22px; }
+  .card--a .card__media{ background-image: linear-gradient(135deg, var(--clay), var(--sand)); }
+  .card--b .card__media{ background-image: linear-gradient(135deg, var(--moss-deep), var(--moss)); }
+  .card__meta{ padding:18px 20px 22px; position: relative;}
+  
+  .card__expand-icon {
+    position: absolute;
+    right: 20px;
+    top: 24px;
+    transition: transform 0.3s ease;
+  }
+  .card.is-open .card__expand-icon {
+    transform: rotate(180deg);
+  }
+
   .card__title{
     font-family:'Fraunces','Noto Serif SC',serif;
     font-weight:600;
@@ -343,6 +287,104 @@
     color:color-mix(in srgb, currentColor 50%, transparent);
   }
 
+  /* 展开的内容区域 */
+  .card__expanded-content {
+    display: none;
+    border-top: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+    padding: 20px;
+    background: var(--paper);
+    animation: slideDown 0.4s ease-out forwards;
+  }
+  .card.is-open .card__expanded-content {
+    display: block;
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .long-image-placeholder {
+    width: 100%;
+    height: 600px;
+    background: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    border-radius: 4px;
+    margin-bottom: 12px;
+  }
+
+  /* ===================== Product UI & PRD (产品设计) ===================== */
+  .prd-section {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 24px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 6px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(0,0,0,0.05);
+  }
+  .prd-text h4 { margin-bottom: 8px; font-size: 1rem; }
+  .prd-text ul { padding-left: 18px; margin-bottom: 16px; font-size: 0.85rem; color: #555; }
+  
+  .iframe-container {
+    width: 100%;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #f0f0f0;
+  }
+  .scrollable-flowchart {
+    width: 100%;
+    overflow-x: auto;
+    background: #fafafa;
+    border: 1px dashed #ccc;
+    padding: 20px;
+    white-space: nowrap;
+    border-radius: 6px;
+  }
+  .scrollable-flowchart img {
+    height: 300px; /* 根据你的流程图高度调整 */
+    max-width: none;
+  }
+
+  /* ===================== Masonry Photo Wall (摄影) ===================== */
+  .masonry-grid {
+    column-count: 2; /* 默认两列 */
+    column-gap: 16px;
+    max-width: 900px;
+  }
+  .masonry-item {
+    break-inside: avoid; /* 防止图片被打断到下一列 */
+    margin-bottom: 16px;
+    background: color-mix(in srgb, currentColor 3%, transparent);
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, currentColor 8%, transparent);
+  }
+  .masonry-item img {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+  }
+  /* 模拟图片占位高度 */
+  .img-h-1 { height: 200px; background: #c2c2c2;}
+  .img-h-2 { height: 350px; background: #a8a8a8;}
+  .img-h-3 { height: 260px; background: #8f8f8f;}
+  
+  .masonry-meta {
+    padding: 12px 14px;
+  }
+  .masonry-meta h4 {
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+  }
+  .masonry-meta p {
+    font-size: 0.75rem;
+    color: color-mix(in srgb, currentColor 60%, transparent);
+  }
+
   /* ===================== Footer hint ===================== */
   .foothint{
     flex:0 0 auto;
@@ -359,18 +401,9 @@
     border-top:1px solid rgba(43,39,34,0.1);
   }
 
-  /* ===================== Focus ===================== */
-  .panel__tab:focus-visible,
-  .card:focus-visible{
-    outline:2px solid var(--clay);
-    outline-offset:-3px;
-  }
-
   /* ===================== Responsive ===================== */
   @media (max-width:860px){
     .topbar{ padding:0 18px; }
-    .topbar__status span:last-child{ display:none; }
-
     .spine{ flex-direction:column; }
     .panel{
       flex-direction:column;
@@ -380,13 +413,6 @@
       border-bottom:1px solid color-mix(in srgb, currentColor 12%, transparent);
     }
     .panel:last-of-type{ border-bottom:none; }
-
-    .panel__watermark{ font-size:clamp(3.5rem, 28vw, 7rem); }
-    .panel.is-active .panel__watermark{
-      font-size:clamp(5rem, 34vw, 10rem);
-      transform:translate(20%,-10%);
-    }
-
     .panel__tab{
       flex:0 0 56px;
       flex-direction:row;
@@ -403,15 +429,9 @@
       font-size:1.05rem;
     }
     .panel__arrow{ margin-left:auto; }
-
     .content-inner{ padding:28px 20px 40px; }
-    .section-title{ font-size:2rem; }
-    .card__media{ height:180px; }
-  }
-
-  @media (prefers-reduced-motion:reduce){
-    *{ animation:none !important; transition:none !important; }
-    .panel{ opacity:1; transform:none; }
+    .prd-section { grid-template-columns: 1fr; }
+    .masonry-grid { column-count: 1; }
   }
 </style>
 </head>
@@ -428,7 +448,6 @@
 
   <div class="spine" id="spine">
 
-    <!-- 01 ABOUT -->
     <section class="panel panel--about is-active" data-meta="01 / 05 · 关于我">
       <div class="panel__watermark">我</div>
       <button class="panel__tab" aria-expanded="true">
@@ -442,37 +461,11 @@
         <div class="content-inner">
           <p class="eyebrow">Index · 01</p>
           <h1 class="section-title">你好 / Hello</h1>
-          <p class="about-role">数字设计师 · 影像创作者 — Digital Designer &amp; Visual Storyteller</p>
-          <p class="about-bio">我在平面设计、产品体验与影像之间游走，喜欢把模糊的想法变成看得见、用得上的东西。过去几年里，我做过品牌视觉、移动应用界面、短片剪辑与摄影创作，始终相信好的设计是问题被妥善安放后的样子。</p>
-          <p class="about-bio">I move between graphic design, product and film — turning loose ideas into things people can see, use, and feel good about.</p>
-
-          <div class="now-line">
-            <span class="dot"></span>
-            <span>目前 · CURRENTLY — 自由职业，居于上海 / Freelance, based in Shanghai</span>
-          </div>
-
-          <div class="chips">
-            <span class="chip">Figma</span>
-            <span class="chip">Photoshop</span>
-            <span class="chip">Illustrator</span>
-            <span class="chip">After Effects</span>
-            <span class="chip">Premiere Pro</span>
-            <span class="chip">Cinema 4D</span>
-            <span class="chip">Procreate</span>
-            <span class="chip">Lightroom</span>
-          </div>
-
-          <ul class="contact-list">
-            <li><span class="label">Email</span><span>hello@yourname.com</span></li>
-            <li><span class="label">Instagram</span><span>@yourname</span></li>
-            <li><span class="label">Behance</span><span>behance.net/yourname</span></li>
-            <li><span class="label">小红书</span><span>@你的昵称</span></li>
-          </ul>
+          <p>我在平面设计、产品体验与影像之间游走，喜欢把模糊的想法变成看得见、用得上的东西。</p>
         </div>
       </div>
     </section>
 
-    <!-- 02 GRAPHIC DESIGN -->
     <section class="panel panel--design" data-meta="02 / 05 · 平面设计">
       <div class="panel__watermark">设</div>
       <button class="panel__tab" aria-expanded="false">
@@ -486,47 +479,49 @@
         <div class="content-inner">
           <p class="eyebrow">Index · 02</p>
           <h2 class="section-title">平面设计</h2>
-          <p class="section-sub">品牌、排版与印刷品之间的视觉语言。<em>Graphic Design — visual systems for brands and print.</em></p>
+          <p class="section-sub">点击卡片展开浏览长图。<em>Click covers to expand projects.</em></p>
 
           <div class="card-grid">
-            <article class="card card--a" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">迹 / Trace — 品牌视觉系统</h3>
-                <p class="card__desc">为独立咖啡馆设计的品牌识别，标志取自手冲咖啡时水流划出的轨迹。</p>
-                <span class="card__tag">2025 · Brand Identity</span>
+            
+            <article class="card card--a has-expand">
+              <div class="card__cover" onclick="toggleCard(this)">
+                <div class="card__media"></div>
+                <div class="card__meta">
+                  <h3 class="card__title">客里行间 / Keli Hangjian — 标志设计</h3>
+                  <p class="card__desc">提取客家文化编织纹理的核心色调，以白底四方格形式呈现的像素风视觉。</p>
+                  <span class="card__tag">推文长图展示 · Brand Identity</span>
+                  <svg class="card__expand-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </div>
+              </div>
+              <div class="card__expanded-content">
+                <div class="long-image-placeholder">
+                  [ 此处替换为你的 <img src="推文长图.jpg"> ]
+                </div>
               </div>
             </article>
-            <article class="card card--b" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">纸上城市 / Paper City — 海报系列</h3>
-                <p class="card__desc">以城市建筑轮廓为母题的系列海报，探索几何与留白的关系。</p>
-                <span class="card__tag">2024 · Poster Series</span>
+
+            <article class="card card--b has-expand">
+              <div class="card__cover" onclick="toggleCard(this)">
+                <div class="card__media"></div>
+                <div class="card__meta">
+                  <h3 class="card__title">AI 绿色营销 / AI Green Marketing — PPT设计</h3>
+                  <p class="card__desc">包含营销理论与案例分析的结构化演示文稿排版设计。</p>
+                  <span class="card__tag">演示文稿展示 · Presentation</span>
+                  <svg class="card__expand-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </div>
+              </div>
+              <div class="card__expanded-content">
+                <div class="long-image-placeholder" style="height: 400px;">
+                  [ 此处替换为你的 PPT 长图或多张轮播图 ]
+                </div>
               </div>
             </article>
-            <article class="card card--c" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">字游 / Letterplay — 字体实验</h3>
-                <p class="card__desc">中英文混排的字体设计实验，关注笔画节奏与呼吸感。</p>
-                <span class="card__tag">2024 · Typography</span>
-              </div>
-            </article>
-            <article class="card card--d" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">盒・装 / Boxed — 包装设计</h3>
-                <p class="card__desc">为手作点心品牌设计的可重复使用包装结构与图案系统。</p>
-                <span class="card__tag">2023 · Packaging</span>
-              </div>
-            </article>
+
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 03 PRODUCT -->
     <section class="panel panel--product" data-meta="03 / 05 · 产品">
       <div class="panel__watermark">品</div>
       <button class="panel__tab" aria-expanded="false">
@@ -540,52 +535,44 @@
         <div class="content-inner">
           <p class="eyebrow">Index · 03</p>
           <h2 class="section-title">产品设计</h2>
-          <p class="section-sub">从草图到可交付的界面与体验。<em>Product Design — from sketches to shipped interfaces.</em></p>
+          <p class="section-sub">包含 PRD 提炼、交互原型与流程演示。</p>
 
-          <div class="card-grid">
-            <article class="card card--b" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">记 / Jì — 习惯打卡应用</h3>
-                <p class="card__desc">帮助用户用最少的步骤记录每日习惯，强调即刻反馈与轻量交互。</p>
-                <span class="card__tag">2025 · Mobile App</span>
-              </div>
-            </article>
-            <article class="card card--c" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">云轴 / Console — 数据管理后台</h3>
-                <p class="card__desc">面向团队的内容管理系统，重新梳理信息架构与组件库。</p>
-                <span class="card__tag">2024 · Web App</span>
-              </div>
-            </article>
-            <article class="card card--d" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">组件库 / Kit — 设计系统</h3>
-                <p class="card__desc">覆盖颜色、字体与交互规范的跨平台设计系统。</p>
-                <span class="card__tag">2024 · Design System</span>
-              </div>
-            </article>
-            <article class="card card--a" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">随手记 / Notes — 小程序</h3>
-                <p class="card__desc">轻量级微信小程序，专注于快速记录与分享。</p>
-                <span class="card__tag">2023 · Mini Program</span>
-              </div>
-            </article>
+          <h3 style="margin-bottom: 16px; font-family:'Fraunces', serif;">项目一：App 名称</h3>
+          
+          <div class="prd-section">
+            <div class="prd-text">
+              <h4>🎯 业务背景与痛点</h4>
+              <ul>
+                <li>用户缺乏结构化的数据记录方式</li>
+                <li>现有竞品操作链路过长，跳出率高</li>
+              </ul>
+              <h4>💡 核心解决方案</h4>
+              <ul>
+                <li>引入一键打卡交互机制，缩短路径</li>
+                <li>数据看板可视化重构</li>
+              </ul>
+            </div>
+            <div class="iframe-container">
+              <iframe style="border: none;" width="100%" height="240" src="https://www.figma.com/embed?embed_host=share&url=YOUR_FIGMA_LINK" allowfullscreen></iframe>
+            </div>
           </div>
-        </div>
+
+          <div style="margin-bottom: 40px;">
+            <h4 style="margin-bottom: 12px; font-size: 0.9rem;">用户核心体验旅程 (User Journey) — 左右滑动查看</h4>
+            <div class="scrollable-flowchart">
+              [ 流程图占位：此处替换为 img 标签，保证图片高度固定，宽度自适应即可实现横滑 ]
+            </div>
+          </div>
+
+          </div>
       </div>
     </section>
 
-    <!-- 04 VIDEO -->
     <section class="panel panel--video" data-meta="04 / 05 · 视频剪辑">
       <div class="panel__watermark">剪</div>
       <button class="panel__tab" aria-expanded="false">
         <span class="panel__index">04</span>
-        <span class="panel__label">视频剪辑 · VIDEO EDITING</span>
+        <span class="panel__label">视频剪辑 · VIDEO</span>
         <span class="panel__arrow">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
         </span>
@@ -594,47 +581,11 @@
         <div class="content-inner">
           <p class="eyebrow">Index · 04</p>
           <h2 class="section-title">视频剪辑</h2>
-          <p class="section-sub">节奏、转场与画面之间的叙事。<em>Video Editing — pacing, transitions and visual storytelling.</em></p>
-
-          <div class="card-grid">
-            <article class="card card--c" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">城市笔记 / City Notes — Vlog 系列</h3>
-                <p class="card__desc">记录城市日常的短视频系列，强调自然光与环境声的剪辑节奏。</p>
-                <span class="card__tag">2025 · Vlog Series</span>
-              </div>
-            </article>
-            <article class="card card--d" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">潮汐 / Tide — 品牌宣传片</h3>
-                <p class="card__desc">为运动品牌制作的 60 秒宣传短片，剪辑节奏配合产品发布。</p>
-                <span class="card__tag">2024 · Brand Film</span>
-              </div>
-            </article>
-            <article class="card card--a" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">字在动 / Kinetic Type — 动态海报</h3>
-                <p class="card__desc">将平面海报转化为动态文字排版的短片练习。</p>
-                <span class="card__tag">2024 · Motion</span>
-              </div>
-            </article>
-            <article class="card card--b" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">三分钟 / Three Minutes — 短片</h3>
-                <p class="card__desc">一部关于等待的三分钟叙事短片。</p>
-                <span class="card__tag">2023 · Short Film</span>
-              </div>
-            </article>
-          </div>
+          <p>此处保留你原有的视频代码内容...</p>
         </div>
       </div>
     </section>
 
-    <!-- 05 PHOTOGRAPHY -->
     <section class="panel panel--photo" data-meta="05 / 05 · 摄影">
       <div class="panel__watermark">影</div>
       <button class="panel__tab" aria-expanded="false">
@@ -648,42 +599,43 @@
         <div class="content-inner">
           <p class="eyebrow">Index · 05</p>
           <h2 class="section-title">摄影</h2>
-          <p class="section-sub">光线、街道与安静的瞬间。<em>Photography — light, streets, and quiet moments.</em></p>
+          <p class="section-sub">向下滚动查看照片墙。<em>Photography — light, streets, and quiet moments.</em></p>
 
-          <div class="card-grid">
-            <article class="card card--d" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">巷口 / Alley — 街头摄影</h3>
-                <p class="card__desc">城市背巷里的光影与人物剪影。</p>
-                <span class="card__tag">Street</span>
+          <div class="masonry-grid">
+            
+            <div class="masonry-item">
+              <div class="img-h-2"></div> <div class="masonry-meta">
+                <h4>巷口 / Alley</h4>
+                <p>24mm · f/2.8 · 街头光影</p>
               </div>
-            </article>
-            <article class="card card--a" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">近处 / Close — 人像系列</h3>
-                <p class="card__desc">自然光下的人像创作，专注于眼神与情绪。</p>
-                <span class="card__tag">Portrait</span>
+            </div>
+
+            <div class="masonry-item">
+              <div class="img-h-1"></div>
+              <div class="masonry-meta">
+                <h4>近处 / Close</h4>
+                <p>50mm · f/1.4 · 人像特写</p>
               </div>
-            </article>
-            <article class="card card--b" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">群山之间 / Among Hills — 风景</h3>
-                <p class="card__desc">西南地区的山地与云层记录。</p>
-                <span class="card__tag">Landscape</span>
+            </div>
+
+            <div class="masonry-item">
+              <div class="img-h-3"></div>
+              <div class="masonry-meta">
+                <h4>群山之间 / Among Hills</h4>
+                <p>风景记录</p>
               </div>
-            </article>
-            <article class="card card--c" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">桌上 / On the Table — 静物</h3>
-                <p class="card__desc">日常物件的静物练习，关注质感与构图。</p>
-                <span class="card__tag">Still Life</span>
+            </div>
+            
+            <div class="masonry-item">
+              <div class="img-h-1"></div>
+              <div class="masonry-meta">
+                <h4>桌上 / On the Table</h4>
+                <p>静物练习</p>
               </div>
-            </article>
+            </div>
+
           </div>
+
         </div>
       </div>
     </section>
@@ -691,12 +643,11 @@
   </div>
 
   <footer class="foothint">
-    <span>悬停 / 点击 展开</span>
-    <span>·</span>
-    <span>Hover or tap to explore</span>
+    <span>悬停 / 点击 展开面板</span>
   </footer>
 
   <script>
+    // 面板切换逻辑
     const panels = document.querySelectorAll('.panel');
     const activeMeta = document.getElementById('active-meta');
 
@@ -711,10 +662,24 @@
 
     panels.forEach(panel => {
       const tab = panel.querySelector('.panel__tab');
-      panel.addEventListener('mouseenter', () => setActive(panel));
+      // 移除 mouseenter 以避免滑动内部区域时意外切换导致浏览打断，改为仅点击切换体验更好
+      // panel.addEventListener('mouseenter', () => setActive(panel)); 
       tab.addEventListener('click', () => setActive(panel));
       tab.addEventListener('focus', () => setActive(panel));
     });
+
+    // 平面设计卡片展开/收起逻辑
+    function toggleCard(element) {
+      const card = element.closest('.card');
+      card.classList.toggle('is-open');
+      
+      // 平滑滚动到展开内容的顶部，优化阅读体验
+      if(card.classList.contains('is-open')) {
+        setTimeout(() => {
+          card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 150);
+      }
+    }
   </script>
 
 </body>
