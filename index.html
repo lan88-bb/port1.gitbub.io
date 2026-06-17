@@ -8,714 +8,1039 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Noto+Serif+SC:wght@500;600;700;900&family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --paper:#F5F2EA;
-    --ink:#2B2722;
-    --clay:#C96F4A;
-    --sand:#ECE3D2;
-    --moss:#DCE3D1;
-    --moss-deep:#7E8C6B;
-    --rose:#EAD9CC;
-    --slate:#7C93A6;
-  }
+:root{
+  --paper:#F5F2EA; --ink:#2B2722; --clay:#C96F4A;
+  --sand:#ECE3D2; --moss:#DCE3D1; --moss-deep:#7E8C6B;
+  --rose:#EAD9CC; --slate:#7C93A6;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  font-family:'Inter','Noto Sans SC',sans-serif;
+  background:var(--paper); color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  display:flex; flex-direction:column;
+  height:100vh; height:100dvh; overflow:hidden; line-height:1.6;
+}
 
-  *{margin:0;padding:0;box-sizing:border-box;}
-  html,body{height:100%;}
+/* ── Topbar ── */
+.topbar{
+  flex:0 0 auto; display:flex; align-items:center;
+  justify-content:space-between; height:56px; padding:0 28px;
+  border-bottom:1px solid rgba(43,39,34,0.1);
+}
+.topbar__brand{
+  font-family:'Fraunces','Noto Serif SC',serif;
+  font-weight:600; font-size:1.05rem; letter-spacing:0.01em;
+}
+.topbar__brand span{color:var(--clay);}
+.topbar__status{
+  display:flex; align-items:center; gap:10px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase;
+  color:color-mix(in srgb,currentColor 55%,transparent);
+}
+.topbar__status .dot{
+  width:6px;height:6px;border-radius:50%;background:var(--clay);
+  animation:pulse 2.6s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.25;}}
 
-  body{
-    font-family:'Inter','Noto Sans SC',sans-serif;
-    background:var(--paper);
-    color:var(--ink);
-    -webkit-font-smoothing:antialiased;
-    display:flex;
-    flex-direction:column;
-    height:100vh;
-    height:100dvh;
-    overflow:hidden;
-    line-height:1.6;
-  }
+/* ── Spine ── */
+.spine{flex:1 1 auto;min-height:0;display:flex;flex-direction:row;width:100%;}
 
-  /* ===================== Top bar ===================== */
-  .topbar{
-    flex:0 0 auto;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    height:56px;
-    padding:0 28px;
-    border-bottom:1px solid rgba(43,39,34,0.1);
-  }
-  .topbar__brand{
-    font-family:'Fraunces','Noto Serif SC',serif;
-    font-weight:600;
-    font-size:1.05rem;
-    letter-spacing:0.01em;
-  }
-  .topbar__brand span{ color:var(--clay); }
-  .topbar__status{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    font-family:'JetBrains Mono',monospace;
-    font-size:0.72rem;
-    letter-spacing:0.14em;
-    text-transform:uppercase;
-    color:color-mix(in srgb, currentColor 55%, transparent);
-  }
-  .topbar__status .dot{
-    width:6px;height:6px;border-radius:50%;
-    background:var(--clay);
-    animation:pulse 2.6s ease-in-out infinite;
-  }
-  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.25;}}
+.panel{
+  position:relative; display:flex; flex-direction:row;
+  flex-grow:1; flex-shrink:1; flex-basis:0; min-width:80px;
+  overflow:hidden; color:var(--ink);
+  border-right:1px solid color-mix(in srgb,currentColor 12%,transparent);
+  background:var(--paper);
+  transition:flex-grow .7s cubic-bezier(.22,.61,.36,1);
+  cursor:pointer; opacity:0; transform:translateY(18px);
+  animation:panelIn .6s ease-out forwards;
+}
+.panel:last-of-type{border-right:none;}
+.panel:nth-of-type(1){animation-delay:.02s;}
+.panel:nth-of-type(2){animation-delay:.08s;}
+.panel:nth-of-type(3){animation-delay:.14s;}
+.panel:nth-of-type(4){animation-delay:.20s;}
+.panel:nth-of-type(5){animation-delay:.26s;}
+@keyframes panelIn{to{opacity:1;transform:translateY(0);}}
 
-  /* ===================== Spine / panels ===================== */
-  .spine{
-    flex:1 1 auto;
-    min-height:0;
-    display:flex;
-    flex-direction:row;
-    width:100%;
-  }
+.panel.is-active{flex-grow:14;cursor:default;}
+.panel--about{background:var(--ink);color:var(--paper);}
+.panel--design{background:var(--sand);}
+.panel--product{background:var(--paper);}
+.panel--video{background:var(--moss);}
+.panel--photo{background:var(--rose);}
 
+/* watermark */
+.panel__watermark{
+  position:absolute; inset:0; display:flex;
+  align-items:center; justify-content:center;
+  font-family:'Noto Serif SC',serif; font-weight:900;
+  font-size:clamp(6rem,26vw,20rem); line-height:1;
+  color:currentColor; opacity:0.055; white-space:nowrap;
+  pointer-events:none;
+  transition:transform .8s cubic-bezier(.22,.61,.36,1),font-size .8s cubic-bezier(.22,.61,.36,1),opacity .8s ease;
+}
+.panel.is-active .panel__watermark{
+  font-size:clamp(10rem,32vw,28rem);
+  transform:translate(10%,-6%); opacity:0.05;
+}
+
+/* ── Tab rail (竖排标签 — 修复中文反转) ── */
+.panel__tab{
+  flex:0 0 80px; display:flex; flex-direction:column;
+  align-items:center; justify-content:space-between;
+  padding:26px 0; position:relative; z-index:2; height:100%;
+  background:none; border:none; cursor:inherit; color:inherit;
+}
+.panel__index,.panel__arrow{
+  writing-mode:horizontal-tb;
+  font-family:'JetBrains Mono',monospace; font-size:0.7rem;
+  letter-spacing:0.1em;
+  color:color-mix(in srgb,currentColor 55%,transparent);
+  display:flex; align-items:center; justify-content:center;
+}
+.panel__arrow svg{display:block;transition:transform .5s ease;}
+.panel.is-active .panel__arrow svg{transform:rotate(135deg);}
+
+/* 
+  竖排标签修复：
+  writing-mode:vertical-lr 让文字从上往下排列（中文正向），
+  不再用 rotate(180deg)，避免文字镜像翻转
+*/
+.panel__label{
+  writing-mode:vertical-lr;
+  text-orientation:mixed;
+  font-family:'Fraunces','Noto Serif SC',serif;
+  font-weight:500;
+  font-size:clamp(0.9rem,1.2vw,1.3rem);
+  letter-spacing:0.06em;
+  white-space:nowrap;
+  color:inherit;
+}
+
+/* ── Content area ── */
+.panel__content{
+  flex:1 1 auto; min-width:0; height:100%;
+  overflow:hidden; position:relative; z-index:2;
+}
+.content-inner{
+  height:100%; overflow-y:auto;
+  padding:48px 56px 80px;
+  opacity:0; transform:translateX(10px);
+  transition:opacity .38s ease .12s,transform .5s ease .08s;
+}
+.panel.is-active .content-inner{opacity:1;transform:translateX(0);}
+.content-inner::-webkit-scrollbar{width:5px;}
+.content-inner::-webkit-scrollbar-track{background:transparent;}
+.content-inner::-webkit-scrollbar-thumb{
+  background:color-mix(in srgb,currentColor 20%,transparent);
+  border-radius:3px;
+}
+
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.72rem; letter-spacing:0.2em; text-transform:uppercase;
+  color:color-mix(in srgb,currentColor 50%,transparent);
+  margin-bottom:18px;
+}
+.section-title{
+  font-family:'Fraunces','Noto Serif SC',serif; font-weight:600;
+  font-size:clamp(2.2rem,4.4vw,4rem); line-height:1.1; margin-bottom:8px;
+}
+.section-sub{
+  font-size:0.95rem;
+  color:color-mix(in srgb,currentColor 60%,transparent);
+  margin-bottom:36px; max-width:52ch;
+}
+.section-sub em{
+  display:block; font-style:normal;
+  font-family:'Inter','Noto Sans SC',sans-serif;
+  font-size:0.84rem; margin-top:5px;
+  color:color-mix(in srgb,currentColor 42%,transparent);
+}
+
+/* ── About ── */
+.about-role{font-size:1.05rem;margin-bottom:26px;color:color-mix(in srgb,currentColor 72%,transparent);}
+.about-bio{max-width:58ch;font-size:1rem;margin-bottom:8px;}
+.about-bio+.about-bio{font-size:0.88rem;color:color-mix(in srgb,currentColor 55%,transparent);margin-bottom:36px;}
+.now-line{
+  display:flex;align-items:center;gap:10px;
+  font-family:'JetBrains Mono',monospace;font-size:0.78rem;
+  letter-spacing:0.08em;text-transform:uppercase;margin-bottom:36px;
+}
+.now-line .dot{width:7px;height:7px;border-radius:50%;background:var(--clay);animation:pulse 2.6s ease-in-out infinite;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px;max-width:520px;}
+.chip{
+  font-family:'JetBrains Mono',monospace;font-size:0.7rem;
+  letter-spacing:0.05em;text-transform:uppercase;
+  padding:7px 14px;border:1px solid color-mix(in srgb,currentColor 22%,transparent);
+  border-radius:100px;
+}
+.contact-list{list-style:none;display:flex;flex-direction:column;max-width:440px;}
+.contact-list li{
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding:13px 0;border-bottom:1px solid color-mix(in srgb,currentColor 12%,transparent);
+  font-size:0.92rem;
+}
+.contact-list li:first-child{border-top:1px solid color-mix(in srgb,currentColor 12%,transparent);}
+.contact-list .label{
+  font-family:'JetBrains Mono',monospace;font-size:0.7rem;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:color-mix(in srgb,currentColor 55%,transparent);
+}
+
+/* ═══════════════════════════════════════════════
+   平面设计 — 可展开作品项（推文长图 / PPT）
+═══════════════════════════════════════════════ */
+.work-list{display:flex;flex-direction:column;gap:0;max-width:720px;}
+
+.work-item{
+  border-top:1px solid color-mix(in srgb,currentColor 12%,transparent);
+}
+.work-item:last-child{border-bottom:1px solid color-mix(in srgb,currentColor 12%,transparent);}
+
+.work-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 0;cursor:pointer;gap:16px;
+  background:none;border:none;color:inherit;width:100%;text-align:left;
+}
+.work-header:hover .work-title{opacity:.75;}
+.work-header-left{display:flex;flex-direction:column;gap:5px;}
+.work-index{
+  font-family:'JetBrains Mono',monospace;font-size:0.68rem;
+  letter-spacing:0.2em;text-transform:uppercase;
+  color:color-mix(in srgb,currentColor 45%,transparent);
+}
+.work-title{
+  font-family:'Fraunces','Noto Serif SC',serif;font-weight:600;
+  font-size:1.18rem;transition:opacity .2s;
+}
+.work-type{
+  font-family:'JetBrains Mono',monospace;font-size:0.7rem;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:color-mix(in srgb,currentColor 50%,transparent);
+}
+.work-toggle{
+  flex:0 0 auto;width:32px;height:32px;border-radius:50%;
+  border:1px solid color-mix(in srgb,currentColor 20%,transparent);
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .4s cubic-bezier(.22,.61,.36,1),background .2s;
+}
+.work-item.is-open .work-toggle{
+  transform:rotate(45deg);
+  background:color-mix(in srgb,currentColor 8%,transparent);
+}
+.work-toggle svg{display:block;}
+
+/* expand body */
+.work-body{
+  max-height:0;overflow:hidden;
+  transition:max-height .6s cubic-bezier(.22,.61,.36,1);
+}
+.work-item.is-open .work-body{max-height:4000px;}
+.work-body-inner{padding-bottom:32px;}
+
+/* 推文长图：竖向滚动条+图片列 */
+.tweet-scroll{
+  display:flex;flex-direction:column;gap:16px;
+  max-height:520px;overflow-y:auto;
+  padding:4px 4px 4px 0;
+}
+.tweet-scroll::-webkit-scrollbar{width:4px;}
+.tweet-scroll::-webkit-scrollbar-thumb{background:color-mix(in srgb,currentColor 18%,transparent);border-radius:2px;}
+
+.tweet-img{
+  width:100%;border-radius:6px;
+  background:linear-gradient(160deg,var(--clay) 0%,var(--sand) 100%);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;
+  color:color-mix(in srgb,currentColor 50%,transparent);
+  border:1px solid color-mix(in srgb,currentColor 8%,transparent);
+}
+.tweet-img.h-tall{height:380px;}
+.tweet-img.h-mid{height:260px;}
+.tweet-img.h-short{height:180px;}
+/* 替换占位：直接给 .tweet-img 加 background-image 即可 */
+
+/* PPT slides grid */
+.ppt-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;
+}
+.ppt-slide{
+  aspect-ratio:16/9;border-radius:5px;overflow:hidden;
+  background:linear-gradient(135deg,var(--slate),var(--paper));
+  border:1px solid color-mix(in srgb,currentColor 10%,transparent);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;font-size:0.65rem;
+  letter-spacing:0.1em;color:color-mix(in srgb,currentColor 40%,transparent);
+  position:relative;
+}
+.ppt-slide-n{
+  position:absolute;top:8px;left:10px;
+  font-family:'JetBrains Mono',monospace;font-size:0.6rem;
+  color:color-mix(in srgb,currentColor 35%,transparent);
+}
+/* 替换：给 .ppt-slide 加 background-image:url(…) background-size:cover */
+
+.work-desc{
+  font-size:0.9rem;color:color-mix(in srgb,currentColor 62%,transparent);
+  margin-bottom:20px;max-width:58ch;
+}
+
+/* ═══════════════════════════════════════════════
+   产品板块 — 标签页
+═══════════════════════════════════════════════ */
+.proj-block{margin-bottom:52px;}
+.proj-name{
+  font-family:'Fraunces','Noto Serif SC',serif;font-weight:600;
+  font-size:1.55rem;margin-bottom:4px;
+}
+.proj-meta{
+  font-family:'JetBrains Mono',monospace;font-size:0.7rem;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:color-mix(in srgb,currentColor 45%,transparent);
+  margin-bottom:20px;
+}
+.proj-desc{font-size:0.92rem;color:color-mix(in srgb,currentColor 65%,transparent);margin-bottom:24px;max-width:54ch;}
+
+/* tab nav */
+.tab-nav{
+  display:flex;gap:0;margin-bottom:0;
+  border-bottom:1px solid color-mix(in srgb,currentColor 15%,transparent);
+}
+.tab-btn{
+  font-family:'JetBrains Mono',monospace;font-size:0.7rem;letter-spacing:0.14em;
+  text-transform:uppercase;padding:10px 18px;cursor:pointer;
+  border:none;background:none;color:inherit;
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+  color:color-mix(in srgb,currentColor 50%,transparent);
+  transition:color .2s,border-color .2s;
+}
+.tab-btn.is-active{
+  color:currentColor;border-bottom-color:var(--clay);
+}
+.tab-panels{padding-top:28px;}
+.tab-panel{display:none;}
+.tab-panel.is-active{display:block;}
+
+/* phone mockup frame */
+.phone-frame-wrap{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:12px;}
+.phone-frame{
+  width:160px;border-radius:22px;overflow:hidden;
+  border:2px solid color-mix(in srgb,currentColor 18%,transparent);
+  box-shadow:0 8px 24px -10px rgba(0,0,0,0.18);
+  background:color-mix(in srgb,currentColor 5%,transparent);
+}
+.phone-screen{
+  aspect-ratio:9/19.5;width:100%;
+  background:linear-gradient(160deg,var(--sand) 0%,var(--paper) 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+}
+.phone-screen-placeholder{
+  font-family:'JetBrains Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;
+  text-align:center;color:color-mix(in srgb,currentColor 35%,transparent);
+  padding:0 14px;line-height:1.6;
+}
+/* 替换：给 .phone-screen 加 background-image:url(你的截图) background-size:cover */
+.phone-caption{
+  text-align:center;padding:8px 0 14px;
+  font-family:'JetBrains Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;
+  text-transform:uppercase;color:color-mix(in srgb,currentColor 40%,transparent);
+}
+
+/* 流程图占位 */
+.flow-placeholder{
+  border:1px dashed color-mix(in srgb,currentColor 22%,transparent);
+  border-radius:6px;padding:56px 32px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+  color:color-mix(in srgb,currentColor 40%,transparent);
+  margin-bottom:24px;
+}
+.flow-placeholder svg{opacity:.4;}
+.flow-label{font-family:'JetBrains Mono',monospace;font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;}
+/* 替换：把 .flow-placeholder 换成 <img src="your-flow.png"> 或 Miro iframe */
+
+/* 文件下载 */
+.download-list{display:flex;flex-direction:column;gap:10px;}
+.dl-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;
+  border:1px solid color-mix(in srgb,currentColor 12%,transparent);
+  border-radius:6px;
+  background:color-mix(in srgb,currentColor 3%,transparent);
+  transition:background .2s,border-color .2s;
+}
+.dl-item:hover{background:color-mix(in srgb,currentColor 7%,transparent);}
+.dl-item-info{display:flex;flex-direction:column;gap:3px;}
+.dl-item-name{font-size:0.92rem;font-weight:500;}
+.dl-item-meta{
+  font-family:'JetBrains Mono',monospace;font-size:0.68rem;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:color-mix(in srgb,currentColor 45%,transparent);
+}
+.dl-btn{
+  font-family:'JetBrains Mono',monospace;font-size:0.68rem;
+  letter-spacing:0.12em;text-transform:uppercase;
+  padding:7px 14px;
+  border:1px solid color-mix(in srgb,currentColor 22%,transparent);
+  border-radius:100px;background:none;cursor:pointer;color:inherit;
+  text-decoration:none;display:inline-flex;align-items:center;gap:6px;
+  transition:background .2s,border-color .2s;
+}
+.dl-btn:hover{background:color-mix(in srgb,currentColor 10%,transparent);}
+
+/* ═══════════════════════════════════════════════
+   视频板块 (card grid kept)
+═══════════════════════════════════════════════ */
+.card-grid{display:grid;grid-template-columns:1fr;gap:24px;max-width:720px;}
+.card{
+  display:flex;flex-direction:column;
+  border:1px solid color-mix(in srgb,currentColor 10%,transparent);
+  border-radius:4px;overflow:hidden;
+  transition:transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .35s ease;
+  background:color-mix(in srgb,currentColor 3%,transparent);
+}
+.card:hover{transform:translateY(-4px);box-shadow:0 14px 28px -16px rgba(0,0,0,0.28);}
+.card__media{height:clamp(130px,16vw,200px);width:100%;}
+.card--a .card__media{background:linear-gradient(135deg,var(--clay),var(--sand));}
+.card--b .card__media{background:linear-gradient(135deg,var(--moss-deep),var(--moss));}
+.card--c .card__media{background:linear-gradient(135deg,var(--ink),var(--clay));}
+.card--d .card__media{background:linear-gradient(135deg,var(--slate),var(--rose));}
+.card__meta{padding:16px 20px 20px;}
+.card__title{font-family:'Fraunces','Noto Serif SC',serif;font-weight:600;font-size:1.1rem;margin-bottom:7px;}
+.card__desc{font-size:0.87rem;color:color-mix(in srgb,currentColor 60%,transparent);margin-bottom:12px;max-width:46ch;}
+.card__tag{font-family:'JetBrains Mono',monospace;font-size:0.67rem;letter-spacing:0.14em;text-transform:uppercase;color:color-mix(in srgb,currentColor 48%,transparent);}
+
+/* ═══════════════════════════════════════════════
+   摄影 — 瀑布流图片墙
+═══════════════════════════════════════════════ */
+.photo-header{margin-bottom:32px;}
+
+/* CSS columns masonry */
+.masonry{
+  column-count:3;column-gap:14px;
+  max-width:900px;
+}
+@media (max-width:640px){.masonry{column-count:2;}}
+
+.photo-item{
+  break-inside:avoid;
+  margin-bottom:14px;
+  cursor:pointer;
+}
+.photo-thumb{
+  width:100%;border-radius:5px;overflow:hidden;
+  background:linear-gradient(160deg,var(--rose),var(--sand));
+  position:relative;
+  transition:transform .3s cubic-bezier(.22,.61,.36,1),box-shadow .3s ease;
+}
+.photo-thumb:hover{transform:scale(1.025);box-shadow:0 10px 28px -12px rgba(0,0,0,0.22);}
+
+/* Heights vary to create stagger effect */
+.photo-item:nth-child(3n+1) .photo-thumb{aspect-ratio:3/4;}
+.photo-item:nth-child(3n+2) .photo-thumb{aspect-ratio:4/5;}
+.photo-item:nth-child(3n)   .photo-thumb{aspect-ratio:2/3;}
+.photo-item:nth-child(5)    .photo-thumb{aspect-ratio:1/1;}
+.photo-item:nth-child(8)    .photo-thumb{aspect-ratio:4/3;}
+
+/* individual tints */
+.photo-item:nth-child(1) .photo-thumb{background:linear-gradient(135deg,var(--clay),var(--rose));}
+.photo-item:nth-child(2) .photo-thumb{background:linear-gradient(135deg,var(--slate),var(--moss));}
+.photo-item:nth-child(3) .photo-thumb{background:linear-gradient(135deg,var(--moss-deep),var(--sand));}
+.photo-item:nth-child(4) .photo-thumb{background:linear-gradient(160deg,var(--ink),var(--slate));}
+.photo-item:nth-child(5) .photo-thumb{background:linear-gradient(120deg,var(--sand),var(--rose));}
+.photo-item:nth-child(6) .photo-thumb{background:linear-gradient(150deg,var(--clay),var(--moss));}
+.photo-item:nth-child(7) .photo-thumb{background:linear-gradient(140deg,var(--rose),var(--slate));}
+.photo-item:nth-child(8) .photo-thumb{background:linear-gradient(130deg,var(--moss),var(--ink));}
+.photo-item:nth-child(9) .photo-thumb{background:linear-gradient(170deg,var(--sand),var(--clay));}
+
+/* Replace: <div class="photo-thumb" style="background-image:url(…);background-size:cover"> */
+
+.photo-caption{
+  padding:8px 2px 0;
+  font-family:'JetBrains Mono',monospace;font-size:0.65rem;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:color-mix(in srgb,currentColor 50%,transparent);
+  line-height:1.5;
+}
+.photo-caption strong{display:block;font-weight:500;color:color-mix(in srgb,currentColor 70%,transparent);}
+
+/* lightbox */
+.lightbox{
+  position:fixed;inset:0;z-index:999;
+  background:rgba(20,17,14,0.94);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;
+  transition:opacity .3s ease;
+}
+.lightbox.is-open{opacity:1;pointer-events:auto;}
+.lightbox-img{
+  max-width:min(800px,90vw);max-height:85vh;
+  border-radius:6px;object-fit:contain;
+  background:var(--ink);
+  /* placeholder: */
+  width:min(600px,80vw);height:min(400px,60vh);
+  display:flex;align-items:center;justify-content:center;
+}
+.lightbox-close{
+  position:fixed;top:24px;right:28px;
+  background:none;border:none;cursor:pointer;
+  color:rgba(245,242,234,0.75);
+  font-family:'JetBrains Mono',monospace;font-size:0.72rem;letter-spacing:0.2em;
+  text-transform:uppercase;padding:8px;
+}
+
+/* ── Footer hint ── */
+.foothint{
+  flex:0 0 auto;height:38px;display:flex;align-items:center;justify-content:center;gap:10px;
+  font-family:'JetBrains Mono',monospace;font-size:0.67rem;letter-spacing:0.18em;text-transform:uppercase;
+  color:color-mix(in srgb,currentColor 50%,transparent);
+  border-top:1px solid rgba(43,39,34,0.1);
+}
+
+/* ── Focus ── */
+.panel__tab:focus-visible,.card:focus-visible,.work-header:focus-visible{
+  outline:2px solid var(--clay);outline-offset:-2px;
+}
+
+/* ── Mobile ── */
+@media(max-width:860px){
+  .topbar{padding:0 18px;}
+  .topbar__status span:last-child{display:none;}
+  .spine{flex-direction:column;}
   .panel{
-    position:relative;
-    display:flex;
-    flex-direction:row;
-    flex-grow:1;
-    flex-shrink:1;
-    flex-basis:0;
-    min-width:84px;
-    overflow:hidden;
-    color:var(--ink);
-    border-right:1px solid color-mix(in srgb, currentColor 12%, transparent);
-    background:var(--paper);
-    transition:flex-grow .7s cubic-bezier(.22,.61,.36,1);
-    cursor:pointer;
-    opacity:0;
-    transform:translateY(18px);
-    animation:panelIn .6s ease-out forwards;
+    flex-direction:column;min-width:auto;min-height:52px;
+    border-right:none;border-bottom:1px solid color-mix(in srgb,currentColor 12%,transparent);
   }
-  .panel:last-of-type{ border-right:none; }
-  .panel:nth-of-type(1){ animation-delay:.02s; }
-  .panel:nth-of-type(2){ animation-delay:.08s; }
-  .panel:nth-of-type(3){ animation-delay:.14s; }
-  .panel:nth-of-type(4){ animation-delay:.20s; }
-  .panel:nth-of-type(5){ animation-delay:.26s; }
-  @keyframes panelIn{ to{ opacity:1; transform:translateY(0); } }
-
-  .panel.is-active{ flex-grow:14; cursor:default; }
-
-  .panel--about{ background:var(--ink); color:var(--paper); }
-  .panel--design{ background:var(--sand); }
-  .panel--product{ background:var(--paper); }
-  .panel--video{ background:var(--moss); }
-  .panel--photo{ background:var(--rose); }
-
-  /* ---- watermark glyph ---- */
-  .panel__watermark{
-    position:absolute;
-    inset:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-family:'Fraunces','Noto Serif SC',serif;
-    font-weight:900;
-    font-size:clamp(6rem, 26vw, 20rem);
-    line-height:1;
-    color:currentColor;
-    opacity:0.055;
-    white-space:nowrap;
-    pointer-events:none;
-    transition:transform .8s cubic-bezier(.22,.61,.36,1), font-size .8s cubic-bezier(.22,.61,.36,1), opacity .8s ease;
-  }
-  .panel.is-active .panel__watermark{
-    font-size:clamp(10rem, 32vw, 28rem);
-    transform:translate(10%,-6%);
-    opacity:0.05;
-  }
-
-  /* ---- tab (collapsed label / always-visible rail) ---- */
+  .panel:last-of-type{border-bottom:none;}
   .panel__tab{
-    flex:0 0 84px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:space-between;
-    padding:26px 0;
-    position:relative;
-    z-index:2;
-    height:100%;
+    flex:0 0 52px;flex-direction:row;align-items:center;
+    justify-content:flex-start;gap:14px;padding:0 18px;width:100%;height:auto;
   }
-  .panel__index,
-  .panel__arrow{
-    writing-mode:horizontal-tb;
-    font-family:'JetBrains Mono',monospace;
-    font-size:0.7rem;
-    letter-spacing:0.1em;
-    color:color-mix(in srgb, currentColor 55%, transparent);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-  .panel__arrow svg{ display:block; transition:transform .5s ease; }
-  .panel.is-active .panel__arrow svg{ transform:rotate(135deg); }
-
-  .panel__label{
-    writing-mode:vertical-rl;
-    transform:rotate(180deg);
-    font-family:'Fraunces','Noto Serif SC',serif;
-    font-weight:500;
-    font-size:clamp(1rem, 1.35vw, 1.4rem);
-    letter-spacing:0.05em;
-    white-space:nowrap;
-  }
-
-  /* ---- content ---- */
-  .panel__content{
-    flex:1 1 auto;
-    min-width:0;
-    height:100%;
-    overflow:hidden;
-    position:relative;
-    z-index:2;
-  }
-  .content-inner{
-    height:100%;
-    overflow-y:auto;
-    padding:48px 56px 64px;
-    opacity:0;
-    transform:translateX(8px);
-    transition:opacity .35s ease .1s, transform .5s ease .1s;
-  }
-  .panel.is-active .content-inner{
-    opacity:1;
-    transform:translateX(0);
-  }
-  .content-inner::-webkit-scrollbar{ width:6px; }
-  .content-inner::-webkit-scrollbar-track{ background:transparent; }
-  .content-inner::-webkit-scrollbar-thumb{
-    background:color-mix(in srgb, currentColor 22%, transparent);
-    border-radius:3px;
-  }
-
-  .eyebrow{
-    font-family:'JetBrains Mono',monospace;
-    font-size:0.72rem;
-    letter-spacing:0.2em;
-    text-transform:uppercase;
-    color:color-mix(in srgb, currentColor 55%, transparent);
-    margin-bottom:18px;
-  }
-  .section-title{
-    font-family:'Fraunces','Noto Serif SC',serif;
-    font-weight:600;
-    font-size:clamp(2.2rem, 4.4vw, 4rem);
-    line-height:1.1;
-    margin-bottom:6px;
-  }
-  .section-sub{
-    font-size:0.95rem;
-    color:color-mix(in srgb, currentColor 60%, transparent);
-    margin-bottom:32px;
-    max-width:52ch;
-  }
-  .section-sub em{
-    display:block;
-    font-style:normal;
-    font-family:'Inter','Noto Sans SC',sans-serif;
-    font-size:0.85rem;
-    margin-top:6px;
-    color:color-mix(in srgb, currentColor 45%, transparent);
-  }
-
-  /* ===================== About panel ===================== */
-  .about-role{
-    font-size:1.05rem;
-    margin-bottom:28px;
-    color:color-mix(in srgb, currentColor 75%, transparent);
-  }
-  .about-bio{
-    max-width:58ch;
-    font-size:1rem;
-    margin-bottom:8px;
-  }
-  .about-bio + .about-bio{
-    font-size:0.88rem;
-    color:color-mix(in srgb, currentColor 55%, transparent);
-    margin-bottom:36px;
-  }
-  .now-line{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    font-family:'JetBrains Mono',monospace;
-    font-size:0.78rem;
-    letter-spacing:0.08em;
-    text-transform:uppercase;
-    margin-bottom:36px;
-  }
-  .now-line .dot{
-    width:7px;height:7px;border-radius:50%;
-    background:var(--clay);
-    animation:pulse 2.6s ease-in-out infinite;
-  }
-  .chips{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:40px; max-width:520px; }
-  .chip{
-    font-family:'JetBrains Mono',monospace;
-    font-size:0.7rem;
-    letter-spacing:0.05em;
-    text-transform:uppercase;
-    padding:7px 14px;
-    border:1px solid color-mix(in srgb, currentColor 22%, transparent);
-    border-radius:100px;
-  }
-  .contact-list{
-    list-style:none;
-    display:flex;
-    flex-direction:column;
-    gap:0;
-    max-width:420px;
-  }
-  .contact-list li{
-    display:flex;
-    justify-content:space-between;
-    align-items:baseline;
-    padding:13px 0;
-    border-bottom:1px solid color-mix(in srgb, currentColor 12%, transparent);
-    font-size:0.92rem;
-  }
-  .contact-list li:first-child{ border-top:1px solid color-mix(in srgb, currentColor 12%, transparent); }
-  .contact-list .label{
-    font-family:'JetBrains Mono',monospace;
-    font-size:0.7rem;
-    letter-spacing:0.14em;
-    text-transform:uppercase;
-    color:color-mix(in srgb, currentColor 55%, transparent);
-  }
-
-  /* ===================== Cards ===================== */
-  .card-grid{
-    display:grid;
-    grid-template-columns:1fr;
-    gap:28px;
-    max-width:720px;
-  }
-  .card{
-    display:flex;
-    flex-direction:column;
-    border:1px solid color-mix(in srgb, currentColor 10%, transparent);
-    border-radius:4px;
-    overflow:hidden;
-    transition:transform .35s cubic-bezier(.22,.61,.36,1), box-shadow .35s ease;
-    background:color-mix(in srgb, currentColor 3%, transparent);
-  }
-  .card:hover, .card:focus-visible{
-    transform:translateY(-4px);
-    box-shadow:0 14px 28px -16px rgba(0,0,0,0.28);
-  }
-  .card__media{
-    height:clamp(140px, 18vw, 220px);
-    width:100%;
-  }
-  .card--a .card__media{ background:linear-gradient(135deg, var(--clay), var(--sand)); }
-  .card--b .card__media{ background:linear-gradient(135deg, var(--moss-deep), var(--moss)); }
-  .card--c .card__media{ background:linear-gradient(135deg, var(--ink), var(--clay)); }
-  .card--d .card__media{ background:linear-gradient(135deg, var(--slate), var(--rose)); }
-  .card__meta{ padding:18px 20px 22px; }
-  .card__title{
-    font-family:'Fraunces','Noto Serif SC',serif;
-    font-weight:600;
-    font-size:1.15rem;
-    margin-bottom:8px;
-  }
-  .card__desc{
-    font-size:0.88rem;
-    color:color-mix(in srgb, currentColor 60%, transparent);
-    margin-bottom:14px;
-    max-width:46ch;
-  }
-  .card__tag{
-    font-family:'JetBrains Mono',monospace;
-    font-size:0.68rem;
-    letter-spacing:0.14em;
-    text-transform:uppercase;
-    color:color-mix(in srgb, currentColor 50%, transparent);
-  }
-
-  /* ===================== Footer hint ===================== */
-  .foothint{
-    flex:0 0 auto;
-    height:40px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:10px;
-    font-family:'JetBrains Mono',monospace;
-    font-size:0.68rem;
-    letter-spacing:0.18em;
-    text-transform:uppercase;
-    color:color-mix(in srgb, currentColor 55%, transparent);
-    border-top:1px solid rgba(43,39,34,0.1);
-  }
-
-  /* ===================== Focus ===================== */
-  .panel__tab:focus-visible,
-  .card:focus-visible{
-    outline:2px solid var(--clay);
-    outline-offset:-3px;
-  }
-
-  /* ===================== Responsive ===================== */
-  @media (max-width:860px){
-    .topbar{ padding:0 18px; }
-    .topbar__status span:last-child{ display:none; }
-
-    .spine{ flex-direction:column; }
-    .panel{
-      flex-direction:column;
-      min-width:auto;
-      min-height:56px;
-      border-right:none;
-      border-bottom:1px solid color-mix(in srgb, currentColor 12%, transparent);
-    }
-    .panel:last-of-type{ border-bottom:none; }
-
-    .panel__watermark{ font-size:clamp(3.5rem, 28vw, 7rem); }
-    .panel.is-active .panel__watermark{
-      font-size:clamp(5rem, 34vw, 10rem);
-      transform:translate(20%,-10%);
-    }
-
-    .panel__tab{
-      flex:0 0 56px;
-      flex-direction:row;
-      align-items:center;
-      justify-content:flex-start;
-      gap:16px;
-      padding:0 20px;
-      width:100%;
-      height:auto;
-    }
-    .panel__label{
-      writing-mode:horizontal-tb;
-      transform:none;
-      font-size:1.05rem;
-    }
-    .panel__arrow{ margin-left:auto; }
-
-    .content-inner{ padding:28px 20px 40px; }
-    .section-title{ font-size:2rem; }
-    .card__media{ height:180px; }
-  }
-
-  @media (prefers-reduced-motion:reduce){
-    *{ animation:none !important; transition:none !important; }
-    .panel{ opacity:1; transform:none; }
-  }
+  .panel__label{writing-mode:horizontal-tb;font-size:1rem;}
+  .panel__arrow{margin-left:auto;}
+  .content-inner{padding:26px 18px 48px;}
+  .section-title{font-size:1.9rem;}
+  .masonry{column-count:2;}
+  .phone-frame-wrap{justify-content:center;}
+  .ppt-grid{grid-template-columns:1fr 1fr;}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;}
+  .panel{opacity:1;transform:none;}
+}
 </style>
 </head>
 <body>
 
-  <header class="topbar">
-    <div class="topbar__brand">studio<span>.</span>w</div>
-    <div class="topbar__status">
-      <span class="dot"></span>
-      <span id="active-meta">01 / 05 · 关于我</span>
-      <span>· 个人作品集 2026</span>
+<header class="topbar">
+  <div class="topbar__brand">studio<span>.</span>w</div>
+  <div class="topbar__status">
+    <span class="dot"></span>
+    <span id="active-meta">01 / 05 · 关于我</span>
+    <span>· 个人作品集 2026</span>
+  </div>
+</header>
+
+<div class="spine" id="spine">
+
+  <!-- ══════════════ 01 ABOUT ══════════════ -->
+  <section class="panel panel--about is-active" data-meta="01 / 05 · 关于我">
+    <div class="panel__watermark">我</div>
+    <button class="panel__tab" aria-expanded="true">
+      <span class="panel__index">01</span>
+      <span class="panel__label">关于我 · ABOUT ME</span>
+      <span class="panel__arrow">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+      </span>
+    </button>
+    <div class="panel__content">
+      <div class="content-inner">
+        <p class="eyebrow">Index · 01</p>
+        <h1 class="section-title">你好 / Hello</h1>
+        <p class="about-role">数字设计师 · 影像创作者 — Digital Designer &amp; Visual Storyteller</p>
+        <p class="about-bio">我在平面设计、产品体验与影像之间游走，喜欢把模糊的想法变成看得见、用得上的东西。过去几年里，我做过品牌视觉、移动应用界面、短片剪辑与摄影创作，始终相信好的设计是问题被妥善安放后的样子。</p>
+        <p class="about-bio">I move between graphic design, product and film — turning loose ideas into things people can see, use, and feel good about.</p>
+        <div class="now-line">
+          <span class="dot"></span>
+          <span>目前 · CURRENTLY — 自由职业，居于上海 / Freelance, based in Shanghai</span>
+        </div>
+        <div class="chips">
+          <span class="chip">Figma</span><span class="chip">Photoshop</span>
+          <span class="chip">Illustrator</span><span class="chip">After Effects</span>
+          <span class="chip">Premiere Pro</span><span class="chip">Cinema 4D</span>
+          <span class="chip">Procreate</span><span class="chip">Lightroom</span>
+        </div>
+        <ul class="contact-list">
+          <li><span class="label">Email</span><span>hello@yourname.com</span></li>
+          <li><span class="label">Instagram</span><span>@yourname</span></li>
+          <li><span class="label">Behance</span><span>behance.net/yourname</span></li>
+          <li><span class="label">小红书</span><span>@你的昵称</span></li>
+        </ul>
+      </div>
     </div>
-  </header>
+  </section>
 
-  <div class="spine" id="spine">
+  <!-- ══════════════ 02 GRAPHIC DESIGN ══════════════ -->
+  <section class="panel panel--design" data-meta="02 / 05 · 平面设计">
+    <div class="panel__watermark">设</div>
+    <button class="panel__tab" aria-expanded="false">
+      <span class="panel__index">02</span>
+      <span class="panel__label">平面设计 · GRAPHIC DESIGN</span>
+      <span class="panel__arrow">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+      </span>
+    </button>
+    <div class="panel__content">
+      <div class="content-inner">
+        <p class="eyebrow">Index · 02</p>
+        <h2 class="section-title">平面设计</h2>
+        <p class="section-sub">推文长图、PPT 与品牌排版。<em>Graphic Design — editorial, presentation and brand systems.</em></p>
 
-    <!-- 01 ABOUT -->
-    <section class="panel panel--about is-active" data-meta="01 / 05 · 关于我">
-      <div class="panel__watermark">我</div>
-      <button class="panel__tab" aria-expanded="true">
-        <span class="panel__index">01</span>
-        <span class="panel__label">关于我 · ABOUT ME</span>
-        <span class="panel__arrow">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
-        </span>
-      </button>
-      <div class="panel__content">
-        <div class="content-inner">
-          <p class="eyebrow">Index · 01</p>
-          <h1 class="section-title">你好 / Hello</h1>
-          <p class="about-role">数字设计师 · 影像创作者 — Digital Designer &amp; Visual Storyteller</p>
-          <p class="about-bio">我在平面设计、产品体验与影像之间游走，喜欢把模糊的想法变成看得见、用得上的东西。过去几年里，我做过品牌视觉、移动应用界面、短片剪辑与摄影创作，始终相信好的设计是问题被妥善安放后的样子。</p>
-          <p class="about-bio">I move between graphic design, product and film — turning loose ideas into things people can see, use, and feel good about.</p>
+        <div class="work-list">
 
-          <div class="now-line">
-            <span class="dot"></span>
-            <span>目前 · CURRENTLY — 自由职业，居于上海 / Freelance, based in Shanghai</span>
+          <!-- 项目 A：推文长图 -->
+          <div class="work-item" id="work-tweet">
+            <button class="work-header" onclick="toggleWork('work-tweet')">
+              <div class="work-header-left">
+                <span class="work-index">No.01</span>
+                <span class="work-title">推文长图系列</span>
+                <span class="work-type">Social Media · Long Image</span>
+              </div>
+              <span class="work-toggle">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </span>
+            </button>
+            <div class="work-body">
+              <div class="work-body-inner">
+                <p class="work-desc">用于小红书、微博等平台的品牌推文配图，每张长图包含完整叙事结构与视觉层次。向下滚动查看完整内容。</p>
+                <!-- 向下滚动的长图列 -->
+                <div class="tweet-scroll">
+                  <div class="tweet-img h-tall">封面图 / Cover — 替换为你的图片</div>
+                  <div class="tweet-img h-mid">内页 01 / Page 01</div>
+                  <div class="tweet-img h-tall">内页 02 / Page 02</div>
+                  <div class="tweet-img h-short">内页 03 / Page 03</div>
+                  <div class="tweet-img h-mid">内页 04 / Page 04</div>
+                  <div class="tweet-img h-tall">内页 05 / Page 05</div>
+                  <div class="tweet-img h-short">结尾图 / End Card</div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="chips">
-            <span class="chip">Figma</span>
-            <span class="chip">Photoshop</span>
-            <span class="chip">Illustrator</span>
-            <span class="chip">After Effects</span>
-            <span class="chip">Premiere Pro</span>
-            <span class="chip">Cinema 4D</span>
-            <span class="chip">Procreate</span>
-            <span class="chip">Lightroom</span>
+          <!-- 项目 B：PPT 设计 -->
+          <div class="work-item" id="work-ppt">
+            <button class="work-header" onclick="toggleWork('work-ppt')">
+              <div class="work-header-left">
+                <span class="work-index">No.02</span>
+                <span class="work-title">PPT 演示设计</span>
+                <span class="work-type">Presentation Design</span>
+              </div>
+              <span class="work-toggle">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </span>
+            </button>
+            <div class="work-body">
+              <div class="work-body-inner">
+                <p class="work-desc">品牌提案与产品发布演示文稿，注重信息层级与视觉一致性。每格为一张幻灯片，向下滑动浏览全部。</p>
+                <div class="ppt-grid">
+                  <div class="ppt-slide"><span class="ppt-slide-n">01</span>封面</div>
+                  <div class="ppt-slide"><span class="ppt-slide-n">02</span>目录</div>
+                  <div class="ppt-slide"><span class="ppt-slide-n">03</span>背景</div>
+                  <div class="ppt-slide"><span class="ppt-slide-n">04</span>洞察</div>
+                  <div class="ppt-slide"><span class="ppt-slide-n">05</span>方案</div>
+                  <div class="ppt-slide"><span class="ppt-slide-n">06</span>视觉</div>
+                  <div class="ppt-slide"><span class="ppt-slide-n">07</span>排期</div>
+                  <div class="ppt-slide"><span class="ppt-slide-n">08</span>致谢</div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <ul class="contact-list">
-            <li><span class="label">Email</span><span>hello@yourname.com</span></li>
-            <li><span class="label">Instagram</span><span>@yourname</span></li>
-            <li><span class="label">Behance</span><span>behance.net/yourname</span></li>
-            <li><span class="label">小红书</span><span>@你的昵称</span></li>
-          </ul>
-        </div>
+          <!-- 项目 C：品牌系统 -->
+          <div class="work-item" id="work-brand">
+            <button class="work-header" onclick="toggleWork('work-brand')">
+              <div class="work-header-left">
+                <span class="work-index">No.03</span>
+                <span class="work-title">迹 / Trace — 品牌视觉系统</span>
+                <span class="work-type">Brand Identity · 2025</span>
+              </div>
+              <span class="work-toggle">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </span>
+            </button>
+            <div class="work-body">
+              <div class="work-body-inner">
+                <p class="work-desc">为独立咖啡馆设计的品牌识别系统，包含标志、色彩规范、字体组合与应用物料。</p>
+                <div class="ppt-grid">
+                  <div class="ppt-slide" style="background:linear-gradient(135deg,var(--clay),var(--sand));aspect-ratio:1"><span class="ppt-slide-n">01</span>标志</div>
+                  <div class="ppt-slide" style="background:linear-gradient(135deg,var(--ink),var(--clay));aspect-ratio:1"><span class="ppt-slide-n">02</span>色板</div>
+                  <div class="ppt-slide" style="background:linear-gradient(135deg,var(--sand),var(--rose));aspect-ratio:1"><span class="ppt-slide-n">03</span>字体</div>
+                  <div class="ppt-slide" style="background:linear-gradient(135deg,var(--moss),var(--slate));aspect-ratio:1"><span class="ppt-slide-n">04</span>应用</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /work-list -->
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- 02 GRAPHIC DESIGN -->
-    <section class="panel panel--design" data-meta="02 / 05 · 平面设计">
-      <div class="panel__watermark">设</div>
-      <button class="panel__tab" aria-expanded="false">
-        <span class="panel__index">02</span>
-        <span class="panel__label">平面设计 · GRAPHIC DESIGN</span>
-        <span class="panel__arrow">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
-        </span>
-      </button>
-      <div class="panel__content">
-        <div class="content-inner">
-          <p class="eyebrow">Index · 02</p>
-          <h2 class="section-title">平面设计</h2>
-          <p class="section-sub">品牌、排版与印刷品之间的视觉语言。<em>Graphic Design — visual systems for brands and print.</em></p>
+  <!-- ══════════════ 03 PRODUCT ══════════════ -->
+  <section class="panel panel--product" data-meta="03 / 05 · 产品">
+    <div class="panel__watermark">品</div>
+    <button class="panel__tab" aria-expanded="false">
+      <span class="panel__index">03</span>
+      <span class="panel__label">产品 · PRODUCT</span>
+      <span class="panel__arrow">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+      </span>
+    </button>
+    <div class="panel__content">
+      <div class="content-inner">
+        <p class="eyebrow">Index · 03</p>
+        <h2 class="section-title">产品设计</h2>
+        <p class="section-sub">从研究、流程到可交付界面的完整设计过程。<em>Product Design — research, flow and polished interfaces.</em></p>
 
-          <div class="card-grid">
-            <article class="card card--a" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">迹 / Trace — 品牌视觉系统</h3>
-                <p class="card__desc">为独立咖啡馆设计的品牌识别，标志取自手冲咖啡时水流划出的轨迹。</p>
-                <span class="card__tag">2025 · Brand Identity</span>
-              </div>
-            </article>
-            <article class="card card--b" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">纸上城市 / Paper City — 海报系列</h3>
-                <p class="card__desc">以城市建筑轮廓为母题的系列海报，探索几何与留白的关系。</p>
-                <span class="card__tag">2024 · Poster Series</span>
-              </div>
-            </article>
-            <article class="card card--c" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">字游 / Letterplay — 字体实验</h3>
-                <p class="card__desc">中英文混排的字体设计实验，关注笔画节奏与呼吸感。</p>
-                <span class="card__tag">2024 · Typography</span>
-              </div>
-            </article>
-            <article class="card card--d" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">盒・装 / Boxed — 包装设计</h3>
-                <p class="card__desc">为手作点心品牌设计的可重复使用包装结构与图案系统。</p>
-                <span class="card__tag">2023 · Packaging</span>
-              </div>
-            </article>
+        <!-- App 1 -->
+        <div class="proj-block">
+          <div class="proj-name">记 / Jì — 习惯打卡应用</div>
+          <div class="proj-meta">2025 · Mobile App · iOS &amp; Android</div>
+          <div class="proj-desc">帮助用户用最少步骤记录每日习惯，强调即刻反馈与轻量交互。</div>
+
+          <div class="tab-nav" data-proj="app1">
+            <button class="tab-btn is-active" data-tab="proto">原型 Prototype</button>
+            <button class="tab-btn" data-tab="flow">流程图 Flow</button>
+            <button class="tab-btn" data-tab="prd">PRD 文档</button>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 03 PRODUCT -->
-    <section class="panel panel--product" data-meta="03 / 05 · 产品">
-      <div class="panel__watermark">品</div>
-      <button class="panel__tab" aria-expanded="false">
-        <span class="panel__index">03</span>
-        <span class="panel__label">产品 · PRODUCT</span>
-        <span class="panel__arrow">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
-        </span>
-      </button>
-      <div class="panel__content">
-        <div class="content-inner">
-          <p class="eyebrow">Index · 03</p>
-          <h2 class="section-title">产品设计</h2>
-          <p class="section-sub">从草图到可交付的界面与体验。<em>Product Design — from sketches to shipped interfaces.</em></p>
-
-          <div class="card-grid">
-            <article class="card card--b" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">记 / Jì — 习惯打卡应用</h3>
-                <p class="card__desc">帮助用户用最少的步骤记录每日习惯，强调即刻反馈与轻量交互。</p>
-                <span class="card__tag">2025 · Mobile App</span>
+          <div class="tab-panels">
+            <div class="tab-panel is-active" data-panel="app1-proto">
+              <div class="phone-frame-wrap">
+                <div class="phone-frame">
+                  <div class="phone-screen">
+                    <div class="phone-screen-placeholder">首页<br>Home Screen<br><br>替换为<br>你的截图</div>
+                  </div>
+                  <div class="phone-caption">01 · 首页</div>
+                </div>
+                <div class="phone-frame">
+                  <div class="phone-screen">
+                    <div class="phone-screen-placeholder">打卡页<br>Check-in</div>
+                  </div>
+                  <div class="phone-caption">02 · 打卡</div>
+                </div>
+                <div class="phone-frame">
+                  <div class="phone-screen">
+                    <div class="phone-screen-placeholder">统计页<br>Analytics</div>
+                  </div>
+                  <div class="phone-caption">03 · 数据</div>
+                </div>
+                <div class="phone-frame">
+                  <div class="phone-screen">
+                    <div class="phone-screen-placeholder">设置页<br>Settings</div>
+                  </div>
+                  <div class="phone-caption">04 · 设置</div>
+                </div>
               </div>
-            </article>
-            <article class="card card--c" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">云轴 / Console — 数据管理后台</h3>
-                <p class="card__desc">面向团队的内容管理系统，重新梳理信息架构与组件库。</p>
-                <span class="card__tag">2024 · Web App</span>
+              <p style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:color-mix(in srgb,currentColor 40%,transparent);">
+                → 将手机截图作为 background-image 填入 .phone-screen 即可展示真实界面
+              </p>
+            </div>
+            <div class="tab-panel" data-panel="app1-flow">
+              <div class="flow-placeholder">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="5" height="5" rx="1"/><rect x="16" y="3" width="5" height="5" rx="1"/><rect x="9.5" y="16" width="5" height="5" rx="1"/><line x1="8" y1="5.5" x2="16" y2="5.5"/><line x1="5.5" y1="8" x2="5.5" y2="14"/><line x1="18.5" y1="8" x2="18.5" y2="14"/><line x1="5.5" y1="14" x2="12" y2="16"/><line x1="18.5" y1="14" x2="12" y2="16"/></svg>
+                <span class="flow-label">用户旅程 / 流程图 — 替换为你的流程图图片或嵌入 Miro 链接</span>
               </div>
-            </article>
-            <article class="card card--d" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">组件库 / Kit — 设计系统</h3>
-                <p class="card__desc">覆盖颜色、字体与交互规范的跨平台设计系统。</p>
-                <span class="card__tag">2024 · Design System</span>
+            </div>
+            <div class="tab-panel" data-panel="app1-prd">
+              <div class="download-list">
+                <div class="dl-item">
+                  <div class="dl-item-info">
+                    <span class="dl-item-name">记 App · 产品需求文档</span>
+                    <span class="dl-item-meta">PRD · PDF · 更新于 2025.03</span>
+                  </div>
+                  <a href="#" class="dl-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    下载
+                  </a>
+                </div>
+                <div class="dl-item">
+                  <div class="dl-item-info">
+                    <span class="dl-item-name">记 App · 用户研究报告</span>
+                    <span class="dl-item-meta">Research · PDF · 2024.11</span>
+                  </div>
+                  <a href="#" class="dl-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    下载
+                  </a>
+                </div>
               </div>
-            </article>
-            <article class="card card--a" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">随手记 / Notes — 小程序</h3>
-                <p class="card__desc">轻量级微信小程序，专注于快速记录与分享。</p>
-                <span class="card__tag">2023 · Mini Program</span>
-              </div>
-            </article>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 04 VIDEO -->
-    <section class="panel panel--video" data-meta="04 / 05 · 视频剪辑">
-      <div class="panel__watermark">剪</div>
-      <button class="panel__tab" aria-expanded="false">
-        <span class="panel__index">04</span>
-        <span class="panel__label">视频剪辑 · VIDEO EDITING</span>
-        <span class="panel__arrow">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
-        </span>
-      </button>
-      <div class="panel__content">
-        <div class="content-inner">
-          <p class="eyebrow">Index · 04</p>
-          <h2 class="section-title">视频剪辑</h2>
-          <p class="section-sub">节奏、转场与画面之间的叙事。<em>Video Editing — pacing, transitions and visual storytelling.</em></p>
-
-          <div class="card-grid">
-            <article class="card card--c" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">城市笔记 / City Notes — Vlog 系列</h3>
-                <p class="card__desc">记录城市日常的短视频系列，强调自然光与环境声的剪辑节奏。</p>
-                <span class="card__tag">2025 · Vlog Series</span>
-              </div>
-            </article>
-            <article class="card card--d" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">潮汐 / Tide — 品牌宣传片</h3>
-                <p class="card__desc">为运动品牌制作的 60 秒宣传短片，剪辑节奏配合产品发布。</p>
-                <span class="card__tag">2024 · Brand Film</span>
-              </div>
-            </article>
-            <article class="card card--a" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">字在动 / Kinetic Type — 动态海报</h3>
-                <p class="card__desc">将平面海报转化为动态文字排版的短片练习。</p>
-                <span class="card__tag">2024 · Motion</span>
-              </div>
-            </article>
-            <article class="card card--b" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">三分钟 / Three Minutes — 短片</h3>
-                <p class="card__desc">一部关于等待的三分钟叙事短片。</p>
-                <span class="card__tag">2023 · Short Film</span>
-              </div>
-            </article>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- 05 PHOTOGRAPHY -->
-    <section class="panel panel--photo" data-meta="05 / 05 · 摄影">
-      <div class="panel__watermark">影</div>
-      <button class="panel__tab" aria-expanded="false">
-        <span class="panel__index">05</span>
-        <span class="panel__label">摄影 · PHOTOGRAPHY</span>
-        <span class="panel__arrow">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
-        </span>
-      </button>
-      <div class="panel__content">
-        <div class="content-inner">
-          <p class="eyebrow">Index · 05</p>
+        <!-- App 2 -->
+        <div class="proj-block">
+          <div class="proj-name">云轴 / Console — 数据管理后台</div>
+          <div class="proj-meta">2024 · Web App · B 端产品</div>
+          <div class="proj-desc">面向团队的内容管理系统，重新梳理信息架构与组件库，提升操作效率 40%。</div>
+
+          <div class="tab-nav" data-proj="app2">
+            <button class="tab-btn is-active" data-tab="proto">原型 Prototype</button>
+            <button class="tab-btn" data-tab="flow">流程图 Flow</button>
+            <button class="tab-btn" data-tab="prd">PRD 文档</button>
+          </div>
+          <div class="tab-panels">
+            <div class="tab-panel is-active" data-panel="app2-proto">
+              <div class="phone-frame-wrap">
+                <div class="phone-frame" style="width:280px;">
+                  <div class="phone-screen" style="aspect-ratio:16/10;background:linear-gradient(135deg,var(--paper),var(--sand));">
+                    <div class="phone-screen-placeholder">仪表盘<br>Dashboard<br><br>替换为你的截图</div>
+                  </div>
+                  <div class="phone-caption">01 · 仪表盘</div>
+                </div>
+                <div class="phone-frame" style="width:280px;">
+                  <div class="phone-screen" style="aspect-ratio:16/10;background:linear-gradient(135deg,var(--sand),var(--rose));">
+                    <div class="phone-screen-placeholder">数据列表<br>Data Table</div>
+                  </div>
+                  <div class="phone-caption">02 · 列表</div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-panel" data-panel="app2-flow">
+              <div class="flow-placeholder">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="5" height="5" rx="1"/><rect x="16" y="3" width="5" height="5" rx="1"/><rect x="9.5" y="16" width="5" height="5" rx="1"/><line x1="8" y1="5.5" x2="16" y2="5.5"/><line x1="5.5" y1="8" x2="5.5" y2="14"/><line x1="18.5" y1="8" x2="18.5" y2="14"/><line x1="5.5" y1="14" x2="12" y2="16"/><line x1="18.5" y1="14" x2="12" y2="16"/></svg>
+                <span class="flow-label">系统信息架构图 — 替换为你的流程图图片</span>
+              </div>
+            </div>
+            <div class="tab-panel" data-panel="app2-prd">
+              <div class="download-list">
+                <div class="dl-item">
+                  <div class="dl-item-info">
+                    <span class="dl-item-name">云轴 · 产品需求文档 v2.1</span>
+                    <span class="dl-item-meta">PRD · PDF · 2024.08</span>
+                  </div>
+                  <a href="#" class="dl-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    下载
+                  </a>
+                </div>
+                <div class="dl-item">
+                  <div class="dl-item-info">
+                    <span class="dl-item-name">云轴 · 设计规范文档</span>
+                    <span class="dl-item-meta">Design Spec · Figma</span>
+                  </div>
+                  <a href="#" class="dl-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    打开
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ 04 VIDEO ══════════════ -->
+  <section class="panel panel--video" data-meta="04 / 05 · 视频剪辑">
+    <div class="panel__watermark">剪</div>
+    <button class="panel__tab" aria-expanded="false">
+      <span class="panel__index">04</span>
+      <span class="panel__label">视频剪辑 · VIDEO EDITING</span>
+      <span class="panel__arrow">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+      </span>
+    </button>
+    <div class="panel__content">
+      <div class="content-inner">
+        <p class="eyebrow">Index · 04</p>
+        <h2 class="section-title">视频剪辑</h2>
+        <p class="section-sub">节奏、转场与画面之间的叙事。<em>Video Editing — pacing, transitions and visual storytelling.</em></p>
+        <div class="card-grid">
+          <article class="card card--c" tabindex="0">
+            <div class="card__media"></div>
+            <div class="card__meta">
+              <h3 class="card__title">城市笔记 / City Notes — Vlog 系列</h3>
+              <p class="card__desc">记录城市日常的短视频系列，强调自然光与环境声的剪辑节奏。</p>
+              <span class="card__tag">2025 · Vlog Series</span>
+            </div>
+          </article>
+          <article class="card card--d" tabindex="0">
+            <div class="card__media"></div>
+            <div class="card__meta">
+              <h3 class="card__title">潮汐 / Tide — 品牌宣传片</h3>
+              <p class="card__desc">为运动品牌制作的 60 秒宣传短片，剪辑节奏配合产品发布。</p>
+              <span class="card__tag">2024 · Brand Film</span>
+            </div>
+          </article>
+          <article class="card card--a" tabindex="0">
+            <div class="card__media"></div>
+            <div class="card__meta">
+              <h3 class="card__title">字在动 / Kinetic Type — 动态海报</h3>
+              <p class="card__desc">将平面海报转化为动态文字排版的短片练习。</p>
+              <span class="card__tag">2024 · Motion</span>
+            </div>
+          </article>
+          <article class="card card--b" tabindex="0">
+            <div class="card__media"></div>
+            <div class="card__meta">
+              <h3 class="card__title">三分钟 / Three Minutes — 短片</h3>
+              <p class="card__desc">一部关于等待的三分钟叙事短片。</p>
+              <span class="card__tag">2023 · Short Film</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ 05 PHOTOGRAPHY ══════════════ -->
+  <section class="panel panel--photo" data-meta="05 / 05 · 摄影">
+    <div class="panel__watermark">影</div>
+    <button class="panel__tab" aria-expanded="false">
+      <span class="panel__index">05</span>
+      <span class="panel__label">摄影 · PHOTOGRAPHY</span>
+      <span class="panel__arrow">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+      </span>
+    </button>
+    <div class="panel__content">
+      <div class="content-inner">
+        <p class="eyebrow">Index · 05</p>
+        <div class="photo-header">
           <h2 class="section-title">摄影</h2>
           <p class="section-sub">光线、街道与安静的瞬间。<em>Photography — light, streets, and quiet moments.</em></p>
-
-          <div class="card-grid">
-            <article class="card card--d" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">巷口 / Alley — 街头摄影</h3>
-                <p class="card__desc">城市背巷里的光影与人物剪影。</p>
-                <span class="card__tag">Street</span>
-              </div>
-            </article>
-            <article class="card card--a" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">近处 / Close — 人像系列</h3>
-                <p class="card__desc">自然光下的人像创作，专注于眼神与情绪。</p>
-                <span class="card__tag">Portrait</span>
-              </div>
-            </article>
-            <article class="card card--b" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">群山之间 / Among Hills — 风景</h3>
-                <p class="card__desc">西南地区的山地与云层记录。</p>
-                <span class="card__tag">Landscape</span>
-              </div>
-            </article>
-            <article class="card card--c" tabindex="0">
-              <div class="card__media"></div>
-              <div class="card__meta">
-                <h3 class="card__title">桌上 / On the Table — 静物</h3>
-                <p class="card__desc">日常物件的静物练习，关注质感与构图。</p>
-                <span class="card__tag">Still Life</span>
-              </div>
-            </article>
-          </div>
         </div>
+
+        <!-- 瀑布流图片墙 -->
+        <div class="masonry" id="masonry">
+
+          <div class="photo-item" onclick="openLightbox(this)">
+            <div class="photo-thumb"></div>
+            <div class="photo-caption"><strong>巷口 / Alley</strong>上海 · 2025</div>
+          </div>
+          <div class="photo-item" onclick="openLightbox(this)">
+            <div class="photo-thumb"></div>
+            <div class="photo-caption"><strong>近处 / Close</strong>人像 · 2025</div>
+          </div>
+          <div class="photo-item" onclick="openLightbox(this)">
+            <div class="photo-thumb"></div>
+            <div class="photo-caption"><strong>群山之间 / Among Hills</strong>云南 · 2024</div>
+          </div>
+          <div class="photo-item" onclick="openLightbox(this)">
+            <div class="photo-thumb"></div>
+            <div class="photo-caption"><strong>桌上 / On the Table</strong>静物 · 2024</div>
+          </div>
+          <div class="photo-item" onclick="openLightbox(this)">
+            <div class="photo-thumb"></div>
+            <div class="photo-caption"><strong>光痕 / Light Trace</strong>夜景 · 2024</div>
+          </div>
+          <div class="photo-item" onclick="openLightbox(this)">
+            <div class="photo-thumb"></div>
+            <div class="photo-caption"><strong>晨雾 / Morning Mist</strong>成都 · 2024</div>
+          </div>
+          <div class="photo-item" onclick="openLightbox(this)">
+            <div class="photo-thumb"></div>
+            <div class="photo-caption"><strong>候 / Waiting</strong>街头 · 2023</div>
+          </div>
+          <div class="photo-item" onclick="openLightbox(this)">
+            <div class="photo-thumb"></div>
+            <div class="photo-caption"><strong>框 / Frame</strong>建筑 · 2023</div>
+          </div>
+          <div class="photo-item" onclick="openLightbox(this)">
+            <div class="photo-thumb"></div>
+            <div class="photo-caption"><strong>温柔 / Tender</strong>人像 · 2023</div>
+          </div>
+
+        </div><!-- /masonry -->
+
+        <p style="margin-top:32px;font-family:'JetBrains Mono',monospace;font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:color-mix(in srgb,currentColor 40%,transparent);">
+          → 将 .photo-thumb 的 background 替换为 background-image:url(…); background-size:cover 即可
+        </p>
       </div>
-    </section>
+    </div>
+  </section>
 
+</div>
+
+<footer class="foothint">
+  <span>悬停 / 点击 展开</span>
+  <span>·</span>
+  <span>Hover or tap to explore</span>
+</footer>
+
+<!-- Lightbox (摄影) -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">关闭 · ESC</button>
+  <div class="lightbox-img" id="lightbox-img">
+    <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;color:rgba(245,242,234,0.4);">图片预览</span>
   </div>
+</div>
 
-  <footer class="foothint">
-    <span>悬停 / 点击 展开</span>
-    <span>·</span>
-    <span>Hover or tap to explore</span>
-  </footer>
+<script>
+/* ── Panel squeeze ── */
+const panels = document.querySelectorAll('.panel');
+const activeMeta = document.getElementById('active-meta');
 
-  <script>
-    const panels = document.querySelectorAll('.panel');
-    const activeMeta = document.getElementById('active-meta');
+function setActive(panel){
+  panels.forEach(p => {
+    const active = p === panel;
+    p.classList.toggle('is-active', active);
+    p.querySelector('.panel__tab').setAttribute('aria-expanded', String(active));
+  });
+  activeMeta.textContent = panel.dataset.meta;
+}
 
-    function setActive(panel){
+panels.forEach(panel => {
+  panel.addEventListener('mouseenter', () => setActive(panel));
+  panel.querySelector('.panel__tab').addEventListener('click', () => setActive(panel));
+  panel.querySelector('.panel__tab').addEventListener('focus', () => setActive(panel));
+});
+
+/* ── Design: accordion work items ── */
+function toggleWork(id){
+  const item = document.getElementById(id);
+  if(!item) return;
+  const wasOpen = item.classList.contains('is-open');
+  // close all in same panel
+  item.closest('.work-list').querySelectorAll('.work-item').forEach(i => i.classList.remove('is-open'));
+  if(!wasOpen) item.classList.add('is-open');
+}
+
+/* ── Product: tab switching ── */
+document.querySelectorAll('.tab-nav').forEach(nav => {
+  const proj = nav.dataset.proj;
+  nav.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      nav.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      const tabKey = btn.dataset.tab;
+      const panels = nav.nextElementSibling.querySelectorAll('.tab-panel');
       panels.forEach(p => {
-        const active = p === panel;
-        p.classList.toggle('is-active', active);
-        p.querySelector('.panel__tab').setAttribute('aria-expanded', active);
+        p.classList.toggle('is-active', p.dataset.panel === proj + '-' + tabKey);
       });
-      activeMeta.textContent = panel.dataset.meta;
-    }
-
-    panels.forEach(panel => {
-      const tab = panel.querySelector('.panel__tab');
-      panel.addEventListener('mouseenter', () => setActive(panel));
-      tab.addEventListener('click', () => setActive(panel));
-      tab.addEventListener('focus', () => setActive(panel));
     });
-  </script>
+  });
+});
+
+/* ── Photography lightbox ── */
+function openLightbox(item){
+  document.getElementById('lightbox').classList.add('is-open');
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('is-open');
+}
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape') closeLightbox();
+});
+</script>
 
 </body>
 </html>
