@@ -494,6 +494,291 @@ body{
   text-transform:uppercase;padding:8px;
 }
 
+/* ═══════════════════════════════════════════════
+   内容运营 — 分区切换 tabs
+═══════════════════════════════════════════════ */
+.ops-tabs{
+  display:flex; gap:0; margin-bottom:32px;
+  border-bottom:1px solid color-mix(in srgb,currentColor 15%,transparent);
+}
+.ops-tab{
+  font-family:'JetBrains Mono',monospace; font-size:0.72rem;
+  letter-spacing:0.16em; text-transform:uppercase;
+  padding:10px 20px; cursor:pointer;
+  border:none; background:none; color:inherit;
+  border-bottom:2px solid transparent; margin-bottom:-1px;
+  color:color-mix(in srgb,currentColor 48%,transparent);
+  transition:color .2s,border-color .2s;
+}
+.ops-tab.is-active{color:currentColor; border-bottom-color:var(--clay);}
+
+.ops-block-title{
+  font-family:'JetBrains Mono',monospace; font-size:0.7rem;
+  letter-spacing:0.2em; text-transform:uppercase;
+  color:color-mix(in srgb,currentColor 50%,transparent);
+  margin-bottom:20px;
+  padding-bottom:10px;
+  border-bottom:1px solid color-mix(in srgb,currentColor 10%,transparent);
+}
+
+/* ── 公众号账号卡 ── */
+.wechat-account-card{
+  display:flex; gap:22px; align-items:flex-start;
+  padding:24px; margin-bottom:36px;
+  border:1px solid color-mix(in srgb,currentColor 12%,transparent);
+  border-radius:8px;
+  background:color-mix(in srgb,currentColor 3%,transparent);
+  max-width:640px;
+}
+.wechat-avatar{
+  flex:0 0 72px; height:72px; border-radius:50%;
+  background:linear-gradient(135deg,var(--clay),var(--sand));
+  display:flex; align-items:center; justify-content:center;
+  font-family:'JetBrains Mono',monospace; font-size:0.65rem;
+  letter-spacing:0.1em; color:color-mix(in srgb,currentColor 50%,transparent);
+  overflow:hidden;
+  /* 替换：background-image:url(头像) background-size:cover */
+}
+.wechat-account-info{ flex:1 1 auto; min-width:0; }
+.wechat-name{
+  font-family:'Fraunces','Noto Serif SC',serif;
+  font-weight:600; font-size:1.1rem; margin-bottom:8px;
+}
+.wechat-desc{
+  font-size:0.87rem; line-height:1.65;
+  color:color-mix(in srgb,currentColor 62%,transparent);
+  margin-bottom:14px; max-width:50ch;
+}
+.wechat-stats{ display:flex; gap:24px; }
+.wechat-stat{ display:flex; flex-direction:column; gap:2px; }
+.wechat-stat-n{
+  font-family:'Fraunces','Noto Serif SC',serif;
+  font-weight:700; font-size:1.25rem; line-height:1;
+}
+.wechat-stat-l{
+  font-family:'JetBrains Mono',monospace; font-size:0.65rem;
+  letter-spacing:0.1em; text-transform:uppercase;
+  color:color-mix(in srgb,currentColor 50%,transparent);
+}
+
+/* ── 推文系列列表 ── */
+.series-list{ display:flex; flex-direction:column; gap:0; max-width:680px; }
+
+.series-item{
+  display:flex; align-items:center; gap:20px;
+  padding:18px 12px 18px 0;
+  border-top:1px solid color-mix(in srgb,currentColor 10%,transparent);
+  cursor:pointer;
+  transition:background .18s;
+  border-radius:4px;
+}
+.series-list .series-item:last-child{
+  border-bottom:1px solid color-mix(in srgb,currentColor 10%,transparent);
+}
+.series-item:hover{ background:color-mix(in srgb,currentColor 4%,transparent); }
+.series-item:hover .series-arrow{ transform:translateX(4px); }
+
+.series-cover{
+  flex:0 0 88px; height:88px; border-radius:6px;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+  /* 替换：background-image:url(封面图) background-size:cover */
+}
+.series-cover--a{ background:linear-gradient(135deg,var(--clay),var(--sand)); }
+.series-cover--b{ background:linear-gradient(135deg,var(--moss-deep),var(--moss)); }
+.series-cover--c{ background:linear-gradient(135deg,var(--ink),var(--slate)); }
+.series-cover--d{ background:linear-gradient(135deg,var(--rose),var(--clay)); }
+
+.series-cover-placeholder{
+  font-family:'JetBrains Mono',monospace; font-size:0.6rem;
+  letter-spacing:0.1em; color:rgba(245,242,234,0.55);
+}
+
+.series-info{ flex:1 1 auto; min-width:0; }
+.series-no{
+  font-family:'JetBrains Mono',monospace; font-size:0.65rem;
+  letter-spacing:0.18em; text-transform:uppercase;
+  color:color-mix(in srgb,currentColor 45%,transparent);
+  margin-bottom:4px;
+}
+.series-name{
+  font-family:'Fraunces','Noto Serif SC',serif;
+  font-weight:600; font-size:1.05rem; margin-bottom:5px;
+}
+.series-brief{
+  font-size:0.82rem; color:color-mix(in srgb,currentColor 55%,transparent);
+  margin-bottom:10px; max-width:38ch; line-height:1.5;
+}
+.series-metrics{ display:flex; gap:14px; flex-wrap:wrap; align-items:center; }
+.metric{
+  display:flex; align-items:center; gap:5px;
+  font-family:'JetBrains Mono',monospace; font-size:0.68rem;
+  letter-spacing:0.06em; color:color-mix(in srgb,currentColor 60%,transparent);
+}
+.metric-tag{
+  font-family:'JetBrains Mono',monospace; font-size:0.65rem;
+  letter-spacing:0.1em; text-transform:uppercase;
+  padding:3px 10px;
+  border:1px solid color-mix(in srgb,currentColor 18%,transparent);
+  border-radius:100px;
+  color:color-mix(in srgb,currentColor 55%,transparent);
+}
+.series-arrow{
+  flex:0 0 auto; font-size:1rem;
+  color:color-mix(in srgb,currentColor 35%,transparent);
+  transition:transform .25s ease;
+}
+
+/* ── 系列 lightbox ── */
+.series-lightbox{
+  position:fixed; inset:0; z-index:998;
+  background:rgba(20,17,14,0.96);
+  display:flex; flex-direction:column;
+  opacity:0; pointer-events:none;
+  transition:opacity .3s ease;
+}
+.series-lightbox.is-open{ opacity:1; pointer-events:auto; }
+.slb-header{
+  flex:0 0 auto; display:flex; align-items:center;
+  justify-content:space-between; padding:18px 28px;
+  border-bottom:1px solid rgba(245,242,234,0.1);
+  color:rgba(245,242,234,0.85);
+}
+.slb-title{
+  font-family:'Fraunces','Noto Serif SC',serif;
+  font-size:1.05rem; font-weight:600;
+}
+.slb-close{
+  background:none; border:none; cursor:pointer;
+  font-family:'JetBrains Mono',monospace; font-size:0.7rem;
+  letter-spacing:0.2em; text-transform:uppercase;
+  color:rgba(245,242,234,0.6); padding:6px;
+}
+.slb-body{
+  flex:1 1 auto; overflow-y:auto;
+  padding:32px;
+  display:flex; justify-content:center;
+}
+.slb-inner{
+  width:100%; max-width:480px;
+  display:flex; flex-direction:column; gap:12px;
+}
+.slb-img{
+  width:100%; border-radius:6px;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'JetBrains Mono',monospace; font-size:0.68rem;
+  letter-spacing:0.1em; color:rgba(245,242,234,0.3);
+}
+.slb-img.h-tall{ background:rgba(245,242,234,0.07); height:420px; }
+.slb-img.h-mid{ background:rgba(245,242,234,0.05); height:280px; }
+.slb-img.h-short{ background:rgba(245,242,234,0.04); height:180px; }
+
+/* ── 内容 — 推文封面展开 ── */
+.tweet-cover-grid{
+  display:flex; flex-direction:column; gap:0; max-width:680px;
+}
+.tweet-cover-item{
+  border-top:1px solid color-mix(in srgb,currentColor 10%,transparent);
+}
+.tweet-cover-item:last-child{
+  border-bottom:1px solid color-mix(in srgb,currentColor 10%,transparent);
+}
+.tweet-cover-btn{
+  display:flex; align-items:center; gap:16px;
+  width:100%; padding:16px 0;
+  background:none; border:none; cursor:pointer; color:inherit; text-align:left;
+}
+.tweet-cover-btn:hover .tweet-cover-title{ opacity:.7; }
+.tweet-cover-img{
+  flex:0 0 80px; height:56px; border-radius:5px;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+  /* 替换：background-image:url(封面) background-size:cover */
+}
+.tweet-cover-img.tc--a{ background:linear-gradient(135deg,var(--clay),var(--sand)); }
+.tweet-cover-img.tc--b{ background:linear-gradient(135deg,var(--moss-deep),var(--moss)); }
+.tweet-cover-img.tc--c{ background:linear-gradient(135deg,var(--slate),var(--rose)); }
+.tc-placeholder{
+  font-family:'JetBrains Mono',monospace; font-size:0.58rem;
+  letter-spacing:0.1em; color:rgba(245,242,234,0.5);
+}
+.tweet-cover-meta{ display:flex; flex-direction:column; gap:3px; flex:1 1 auto; }
+.tweet-cover-title{
+  font-family:'Fraunces','Noto Serif SC',serif;
+  font-size:1rem; font-weight:600; transition:opacity .2s;
+}
+.tweet-cover-date{
+  font-family:'JetBrains Mono',monospace; font-size:0.67rem;
+  letter-spacing:0.12em; text-transform:uppercase;
+  color:color-mix(in srgb,currentColor 45%,transparent);
+}
+/* expand body */
+.tweet-expand-body{
+  max-height:0; overflow:hidden;
+  transition:max-height .55s cubic-bezier(.22,.61,.36,1);
+}
+.tweet-cover-item.is-open .tweet-expand-body{ max-height:3000px; }
+.tweet-expand-body .tweet-scroll{ margin-bottom:20px; }
+
+/* color variants for tweet-img inside content panel */
+.tweet-img.tc--a{ background:linear-gradient(160deg,var(--clay),var(--sand)); }
+.tweet-img.tc--b{ background:linear-gradient(160deg,var(--moss-deep),var(--moss)); }
+.tweet-img.tc--c{ background:linear-gradient(160deg,var(--slate),var(--rose)); }
+
+/* ── 内容 — PPT 封面展开 ── */
+.ppt-cover-list{ display:flex; flex-direction:column; gap:0; max-width:680px; }
+.ppt-cover-item{
+  border-top:1px solid color-mix(in srgb,currentColor 10%,transparent);
+}
+.ppt-cover-item:last-child{
+  border-bottom:1px solid color-mix(in srgb,currentColor 10%,transparent);
+}
+.ppt-cover-btn{
+  display:flex; align-items:center; gap:16px;
+  width:100%; padding:16px 0;
+  background:none; border:none; cursor:pointer; color:inherit; text-align:left;
+}
+.ppt-cover-thumb{
+  flex:0 0 120px; height:68px; border-radius:5px;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:4px;
+  position:relative; overflow:hidden;
+  /* 替换：background-image:url(封面截图) background-size:cover */
+}
+.ppt-cover-thumb.pc--a{ background:linear-gradient(135deg,var(--clay),var(--sand)); }
+.ppt-cover-thumb.pc--b{ background:linear-gradient(135deg,var(--ink),var(--slate)); }
+.ppt-cover-title-label{
+  font-family:'Noto Serif SC',serif; font-size:0.65rem;
+  color:rgba(245,242,234,0.7); text-align:center; padding:0 6px;
+}
+.ppt-cover-info{ display:flex; flex-direction:column; gap:3px; flex:1 1 auto; }
+.ppt-cover-name{
+  font-family:'Fraunces','Noto Serif SC',serif;
+  font-size:1rem; font-weight:600;
+}
+.ppt-cover-date{
+  font-family:'JetBrains Mono',monospace; font-size:0.67rem;
+  letter-spacing:0.12em; text-transform:uppercase;
+  color:color-mix(in srgb,currentColor 45%,transparent);
+}
+.ppt-toggle-icon{
+  flex:0 0 auto; width:28px; height:28px; border-radius:50%;
+  border:1px solid color-mix(in srgb,currentColor 18%,transparent);
+  display:flex; align-items:center; justify-content:center;
+  transition:transform .35s cubic-bezier(.22,.61,.36,1);
+}
+.ppt-cover-item.is-open .ppt-toggle-icon{ transform:rotate(45deg); }
+.ppt-expand-body{
+  max-height:0; overflow:hidden;
+  transition:max-height .55s cubic-bezier(.22,.61,.36,1);
+}
+.ppt-cover-item.is-open .ppt-expand-body{ max-height:2000px; }
+.ppt-expand-body .ppt-grid{ margin-bottom:20px; }
+
+/* ppt slide color variants */
+.ppt-slide.pc--a{ background:linear-gradient(135deg,var(--clay),var(--sand)); }
+.ppt-slide.pc--b{ background:linear-gradient(135deg,var(--ink),var(--slate)); }
+
 /* ── Footer hint ── */
 .foothint{
   flex:0 0 auto;height:38px;display:flex;align-items:center;justify-content:center;gap:10px;
@@ -542,7 +827,7 @@ body{
   <div class="topbar__status">
     <span class="dot"></span>
     <span id="active-meta">01 / 05 · 关于我</span>
-    <span>· 个人作品集 2026</span>
+    <span>· Portfolio 2026</span>
   </div>
 </header>
 
@@ -561,9 +846,9 @@ body{
     <div class="panel__content">
       <div class="content-inner">
         <p class="eyebrow">Index · 01</p>
-        <h1 class="section-title">陈钰方</h1>
-        <p class="about-role">本科 · 土地资源管理专业 · 广东海洋大学 — Digital Designer &amp; Visual Storyteller</p>
-        <p class="about-bio">虽然我本科阶段主要学习土地管理、城市规划、房地产、以及管理学等方面知识，但通过参加房地产策划、挑战杯等比赛，我发觉自己在发掘产品定位、观察市场以及用户需求方面的兴趣，我做过移动应用界面、短片剪辑与摄影创以及公众号运营。</p>
+        <h1 class="section-title">你好 / Hello</h1>
+        <p class="about-role">数字设计师 · 影像创作者 — Digital Designer &amp; Visual Storyteller</p>
+        <p class="about-bio">我在平面设计、产品体验与影像之间游走，喜欢把模糊的想法变成看得见、用得上的东西。过去几年里，我做过品牌视觉、移动应用界面、短片剪辑与摄影创作，始终相信好的设计是问题被妥善安放后的样子。</p>
         <p class="about-bio">I move between graphic design, product and film — turning loose ideas into things people can see, use, and feel good about.</p>
         <div class="now-line">
           <span class="dot"></span>
@@ -585,12 +870,12 @@ body{
     </div>
   </section>
 
-  <!-- ══════════════ 02 GRAPHIC DESIGN ══════════════ -->
-  <section class="panel panel--design" data-meta="02 / 05 · 平面设计">
-    <div class="panel__watermark">设</div>
+  <!-- ══════════════ 02 CONTENT OPS ══════════════ -->
+  <section class="panel panel--design" data-meta="02 / 05 · 内容运营">
+    <div class="panel__watermark">运</div>
     <button class="panel__tab" aria-expanded="false">
       <span class="panel__index">02</span>
-      <span class="panel__label">平面设计 · GRAPHIC DESIGN</span>
+      <span class="panel__label">内容运营 · CONTENT OPS</span>
       <span class="panel__arrow">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
       </span>
@@ -598,95 +883,288 @@ body{
     <div class="panel__content">
       <div class="content-inner">
         <p class="eyebrow">Index · 02</p>
-        <h2 class="section-title">平面设计</h2>
-        <p class="section-sub">推文长图、PPT 与品牌排版。<em>Graphic Design — editorial, presentation and brand systems.</em></p>
+        <h2 class="section-title">内容运营</h2>
+        <p class="section-sub">公众号运营与内容创作。<em>Content Operations — WeChat editorial, social media and presentation design.</em></p>
 
-        <div class="work-list">
+        <!-- ─── 分区标题导航 ─── -->
+        <div class="ops-tabs">
+          <button class="ops-tab is-active" onclick="switchOpsTab('ops-operation',this)">运营 Operation</button>
+          <button class="ops-tab" onclick="switchOpsTab('ops-content',this)">内容 Content</button>
+        </div>
 
-          <!-- 项目 A：推文长图 -->
-          <div class="work-item" id="work-tweet">
-            <button class="work-header" onclick="toggleWork('work-tweet')">
-              <div class="work-header-left">
-                <span class="work-index">No.01</span>
-                <span class="work-title">推文长图系列</span>
-                <span class="work-type">Social Media · Long Image</span>
+        <!-- ════════════════════════════
+             运营 部分
+        ════════════════════════════ -->
+        <div class="ops-section" id="ops-operation">
+
+          <!-- 公众号账号卡 -->
+          <div class="wechat-account-card">
+            <div class="wechat-avatar">
+              <!-- 替换：给此 div 加 background-image:url(你的头像) background-size:cover -->
+              <span>头像</span>
+            </div>
+            <div class="wechat-account-info">
+              <div class="wechat-name">@你的公众号名称</div>
+              <div class="wechat-desc">填写你的公众号定位与简介，例如：专注设计创意与品牌内容的原创公众号，累计发布 XX 篇推文，平均阅读量 XXXX。</div>
+              <div class="wechat-stats">
+                <div class="wechat-stat">
+                  <span class="wechat-stat-n">XX</span>
+                  <span class="wechat-stat-l">篇推文</span>
+                </div>
+                <div class="wechat-stat">
+                  <span class="wechat-stat-n">XXXX</span>
+                  <span class="wechat-stat-l">平均阅读</span>
+                </div>
+                <div class="wechat-stat">
+                  <span class="wechat-stat-n">XX%</span>
+                  <span class="wechat-stat-l">打开率</span>
+                </div>
               </div>
-              <span class="work-toggle">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              </span>
-            </button>
-            <div class="work-body">
-              <div class="work-body-inner">
-                <p class="work-desc">用于小红书、微博等平台的品牌推文配图，每张长图包含完整叙事结构与视觉层次。向下滚动查看完整内容。</p>
-                <!-- 向下滚动的长图列 -->
+            </div>
+          </div>
+
+          <!-- 推文系列列表：左封面 右信息 -->
+          <div class="ops-block-title">推文系列 · Series</div>
+          <div class="series-list">
+
+            <!-- Series 01 -->
+            <div class="series-item" onclick="openSeriesLightbox('series-1')">
+              <div class="series-cover series-cover--a">
+                <!-- 替换：background-image:url(封面图) -->
+                <span class="series-cover-placeholder">封面</span>
+              </div>
+              <div class="series-info">
+                <div class="series-no">Series · 01</div>
+                <div class="series-name">系列名称一</div>
+                <div class="series-brief">简短说明这个系列的主题与内容方向，两三行即可。</div>
+                <div class="series-metrics">
+                  <span class="metric">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    12,450 阅读
+                  </span>
+                  <span class="metric">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                    346 在看
+                  </span>
+                  <span class="metric-tag">6 篇</span>
+                </div>
+              </div>
+              <span class="series-arrow">→</span>
+            </div>
+
+            <!-- Series 02 -->
+            <div class="series-item" onclick="openSeriesLightbox('series-2')">
+              <div class="series-cover series-cover--b">
+                <span class="series-cover-placeholder">封面</span>
+              </div>
+              <div class="series-info">
+                <div class="series-no">Series · 02</div>
+                <div class="series-name">系列名称二</div>
+                <div class="series-brief">简短说明这个系列的主题与内容方向，两三行即可。</div>
+                <div class="series-metrics">
+                  <span class="metric">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    8,820 阅读
+                  </span>
+                  <span class="metric">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                    201 在看
+                  </span>
+                  <span class="metric-tag">4 篇</span>
+                </div>
+              </div>
+              <span class="series-arrow">→</span>
+            </div>
+
+            <!-- Series 03 -->
+            <div class="series-item" onclick="openSeriesLightbox('series-3')">
+              <div class="series-cover series-cover--c">
+                <span class="series-cover-placeholder">封面</span>
+              </div>
+              <div class="series-info">
+                <div class="series-no">Series · 03</div>
+                <div class="series-name">系列名称三</div>
+                <div class="series-brief">简短说明这个系列的主题与内容方向，两三行即可。</div>
+                <div class="series-metrics">
+                  <span class="metric">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    6,130 阅读
+                  </span>
+                  <span class="metric">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                    178 在看
+                  </span>
+                  <span class="metric-tag">5 篇</span>
+                </div>
+              </div>
+              <span class="series-arrow">→</span>
+            </div>
+
+            <!-- Series 04 -->
+            <div class="series-item" onclick="openSeriesLightbox('series-4')">
+              <div class="series-cover series-cover--d">
+                <span class="series-cover-placeholder">封面</span>
+              </div>
+              <div class="series-info">
+                <div class="series-no">Series · 04</div>
+                <div class="series-name">系列名称四</div>
+                <div class="series-brief">简短说明这个系列的主题与内容方向，两三行即可。</div>
+                <div class="series-metrics">
+                  <span class="metric">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    9,780 阅读
+                  </span>
+                  <span class="metric">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                    267 在看
+                  </span>
+                  <span class="metric-tag">8 篇</span>
+                </div>
+              </div>
+              <span class="series-arrow">→</span>
+            </div>
+
+          </div><!-- /series-list -->
+        </div><!-- /ops-operation -->
+
+        <!-- ════════════════════════════
+             内容 部分
+        ════════════════════════════ -->
+        <div class="ops-section" id="ops-content" style="display:none;">
+
+          <!-- 内容子标题 -->
+          <div class="ops-block-title">推文长图 · Long Image</div>
+          <p class="work-desc" style="margin-bottom:20px;">点击封面查看完整推文长图内容。</p>
+
+          <!-- 推文长图：横排封面列，点击展开纵向长图 -->
+          <div class="tweet-cover-grid">
+
+            <div class="tweet-cover-item" id="tc-1">
+              <button class="tweet-cover-btn" onclick="toggleTweetExpand('tc-1')">
+                <div class="tweet-cover-img tc--a">
+                  <span class="tc-placeholder">封面图</span>
+                </div>
+                <div class="tweet-cover-meta">
+                  <span class="tweet-cover-title">推文标题一</span>
+                  <span class="tweet-cover-date">2025.03</span>
+                </div>
+              </button>
+              <div class="tweet-expand-body">
                 <div class="tweet-scroll">
-                  <div class="tweet-img h-tall">封面图 / Cover — 替换为你的图片</div>
-                  <div class="tweet-img h-mid">内页 01 / Page 01</div>
-                  <div class="tweet-img h-tall">内页 02 / Page 02</div>
-                  <div class="tweet-img h-short">内页 03 / Page 03</div>
-                  <div class="tweet-img h-mid">内页 04 / Page 04</div>
-                  <div class="tweet-img h-tall">内页 05 / Page 05</div>
-                  <div class="tweet-img h-short">结尾图 / End Card</div>
+                  <div class="tweet-img h-tall tc--a">封面 Cover</div>
+                  <div class="tweet-img h-mid tc--a">内页 01</div>
+                  <div class="tweet-img h-tall tc--a">内页 02</div>
+                  <div class="tweet-img h-short tc--a">内页 03</div>
+                  <div class="tweet-img h-mid tc--a">结尾 End</div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- 项目 B：PPT 设计 -->
-          <div class="work-item" id="work-ppt">
-            <button class="work-header" onclick="toggleWork('work-ppt')">
-              <div class="work-header-left">
-                <span class="work-index">No.02</span>
-                <span class="work-title">PPT 演示设计</span>
-                <span class="work-type">Presentation Design</span>
+            <div class="tweet-cover-item" id="tc-2">
+              <button class="tweet-cover-btn" onclick="toggleTweetExpand('tc-2')">
+                <div class="tweet-cover-img tc--b">
+                  <span class="tc-placeholder">封面图</span>
+                </div>
+                <div class="tweet-cover-meta">
+                  <span class="tweet-cover-title">推文标题二</span>
+                  <span class="tweet-cover-date">2025.01</span>
+                </div>
+              </button>
+              <div class="tweet-expand-body">
+                <div class="tweet-scroll">
+                  <div class="tweet-img h-tall tc--b">封面 Cover</div>
+                  <div class="tweet-img h-mid tc--b">内页 01</div>
+                  <div class="tweet-img h-tall tc--b">内页 02</div>
+                  <div class="tweet-img h-short tc--b">内页 03</div>
+                </div>
               </div>
-              <span class="work-toggle">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              </span>
-            </button>
-            <div class="work-body">
-              <div class="work-body-inner">
-                <p class="work-desc">品牌提案与产品发布演示文稿，注重信息层级与视觉一致性。每格为一张幻灯片，向下滑动浏览全部。</p>
+            </div>
+
+            <div class="tweet-cover-item" id="tc-3">
+              <button class="tweet-cover-btn" onclick="toggleTweetExpand('tc-3')">
+                <div class="tweet-cover-img tc--c">
+                  <span class="tc-placeholder">封面图</span>
+                </div>
+                <div class="tweet-cover-meta">
+                  <span class="tweet-cover-title">推文标题三</span>
+                  <span class="tweet-cover-date">2024.11</span>
+                </div>
+              </button>
+              <div class="tweet-expand-body">
+                <div class="tweet-scroll">
+                  <div class="tweet-img h-tall tc--c">封面 Cover</div>
+                  <div class="tweet-img h-mid tc--c">内页 01</div>
+                  <div class="tweet-img h-tall tc--c">内页 02</div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /tweet-cover-grid -->
+
+          <!-- PPT 展示 -->
+          <div class="ops-block-title" style="margin-top:44px;">PPT 演示 · Presentation</div>
+          <p class="work-desc" style="margin-bottom:20px;">点击封面查看完整幻灯片内容。</p>
+
+          <div class="ppt-cover-list">
+
+            <div class="ppt-cover-item" id="pc-1">
+              <button class="ppt-cover-btn" onclick="togglePptExpand('pc-1')">
+                <div class="ppt-cover-thumb pc--a">
+                  <span class="ppt-slide-n">PPT 01</span>
+                  <span class="ppt-cover-title-label">演讲标题一</span>
+                </div>
+                <div class="ppt-cover-info">
+                  <span class="ppt-cover-name">演讲标题一 / Presentation Name</span>
+                  <span class="ppt-cover-date">2025 · 12 slides</span>
+                </div>
+                <span class="ppt-toggle-icon">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </span>
+              </button>
+              <div class="ppt-expand-body">
                 <div class="ppt-grid">
-                  <div class="ppt-slide"><span class="ppt-slide-n">01</span>封面</div>
-                  <div class="ppt-slide"><span class="ppt-slide-n">02</span>目录</div>
-                  <div class="ppt-slide"><span class="ppt-slide-n">03</span>背景</div>
-                  <div class="ppt-slide"><span class="ppt-slide-n">04</span>洞察</div>
-                  <div class="ppt-slide"><span class="ppt-slide-n">05</span>方案</div>
-                  <div class="ppt-slide"><span class="ppt-slide-n">06</span>视觉</div>
-                  <div class="ppt-slide"><span class="ppt-slide-n">07</span>排期</div>
-                  <div class="ppt-slide"><span class="ppt-slide-n">08</span>致谢</div>
+                  <div class="ppt-slide pc--a"><span class="ppt-slide-n">01</span>封面</div>
+                  <div class="ppt-slide pc--a"><span class="ppt-slide-n">02</span>目录</div>
+                  <div class="ppt-slide pc--a"><span class="ppt-slide-n">03</span>背景</div>
+                  <div class="ppt-slide pc--a"><span class="ppt-slide-n">04</span>洞察</div>
+                  <div class="ppt-slide pc--a"><span class="ppt-slide-n">05</span>方案</div>
+                  <div class="ppt-slide pc--a"><span class="ppt-slide-n">06</span>视觉</div>
+                  <div class="ppt-slide pc--a"><span class="ppt-slide-n">07</span>数据</div>
+                  <div class="ppt-slide pc--a"><span class="ppt-slide-n">08</span>致谢</div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- 项目 C：品牌系统 -->
-          <div class="work-item" id="work-brand">
-            <button class="work-header" onclick="toggleWork('work-brand')">
-              <div class="work-header-left">
-                <span class="work-index">No.03</span>
-                <span class="work-title">迹 / Trace — 品牌视觉系统</span>
-                <span class="work-type">Brand Identity · 2025</span>
-              </div>
-              <span class="work-toggle">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              </span>
-            </button>
-            <div class="work-body">
-              <div class="work-body-inner">
-                <p class="work-desc">为独立咖啡馆设计的品牌识别系统，包含标志、色彩规范、字体组合与应用物料。</p>
+            <div class="ppt-cover-item" id="pc-2">
+              <button class="ppt-cover-btn" onclick="togglePptExpand('pc-2')">
+                <div class="ppt-cover-thumb pc--b">
+                  <span class="ppt-slide-n">PPT 02</span>
+                  <span class="ppt-cover-title-label">演讲标题二</span>
+                </div>
+                <div class="ppt-cover-info">
+                  <span class="ppt-cover-name">演讲标题二 / Presentation Name</span>
+                  <span class="ppt-cover-date">2024 · 8 slides</span>
+                </div>
+                <span class="ppt-toggle-icon">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </span>
+              </button>
+              <div class="ppt-expand-body">
                 <div class="ppt-grid">
-                  <div class="ppt-slide" style="background:linear-gradient(135deg,var(--clay),var(--sand));aspect-ratio:1"><span class="ppt-slide-n">01</span>标志</div>
-                  <div class="ppt-slide" style="background:linear-gradient(135deg,var(--ink),var(--clay));aspect-ratio:1"><span class="ppt-slide-n">02</span>色板</div>
-                  <div class="ppt-slide" style="background:linear-gradient(135deg,var(--sand),var(--rose));aspect-ratio:1"><span class="ppt-slide-n">03</span>字体</div>
-                  <div class="ppt-slide" style="background:linear-gradient(135deg,var(--moss),var(--slate));aspect-ratio:1"><span class="ppt-slide-n">04</span>应用</div>
+                  <div class="ppt-slide pc--b"><span class="ppt-slide-n">01</span>封面</div>
+                  <div class="ppt-slide pc--b"><span class="ppt-slide-n">02</span>议题</div>
+                  <div class="ppt-slide pc--b"><span class="ppt-slide-n">03</span>内容</div>
+                  <div class="ppt-slide pc--b"><span class="ppt-slide-n">04</span>结论</div>
+                  <div class="ppt-slide pc--b"><span class="ppt-slide-n">05</span>附录</div>
+                  <div class="ppt-slide pc--b"><span class="ppt-slide-n">06</span>致谢</div>
                 </div>
               </div>
             </div>
-          </div>
 
-        </div><!-- /work-list -->
+          </div><!-- /ppt-cover-list -->
+
+        </div><!-- /ops-content -->
+
       </div>
     </div>
   </section>
@@ -976,6 +1454,17 @@ body{
   <span>Hover or tap to explore</span>
 </footer>
 
+<!-- Series lightbox (运营系列) -->
+<div class="series-lightbox" id="series-lb">
+  <div class="slb-header">
+    <span class="slb-title" id="slb-title">系列名称</span>
+    <button class="slb-close" onclick="closeSeriesLightbox()">关闭 · ESC</button>
+  </div>
+  <div class="slb-body">
+    <div class="slb-inner" id="slb-inner"></div>
+  </div>
+</div>
+
 <!-- Lightbox (摄影) -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <button class="lightbox-close" onclick="closeLightbox()">关闭 · ESC</button>
@@ -1030,6 +1519,54 @@ document.querySelectorAll('.tab-nav').forEach(nav => {
   });
 });
 
+/* ── Ops section tab switch ── */
+function switchOpsTab(sectionId, btn){
+  document.querySelectorAll('.ops-tab').forEach(b => b.classList.remove('is-active'));
+  btn.classList.add('is-active');
+  document.querySelectorAll('.ops-section').forEach(s => s.style.display = 'none');
+  document.getElementById(sectionId).style.display = 'block';
+}
+
+/* ── Tweet cover expand ── */
+function toggleTweetExpand(id){
+  const item = document.getElementById(id);
+  const wasOpen = item.classList.contains('is-open');
+  // close all
+  document.querySelectorAll('.tweet-cover-item').forEach(i => i.classList.remove('is-open'));
+  if(!wasOpen) item.classList.add('is-open');
+}
+
+/* ── PPT cover expand ── */
+function togglePptExpand(id){
+  const item = document.getElementById(id);
+  const wasOpen = item.classList.contains('is-open');
+  document.querySelectorAll('.ppt-cover-item').forEach(i => i.classList.remove('is-open'));
+  if(!wasOpen) item.classList.add('is-open');
+}
+
+/* ── Series lightbox ── */
+const seriesData = {
+  'series-1':{ name:'系列名称一', pages:['封面 Cover','内页 01','内页 02','内页 03','内页 04','结尾'], color:'rgba(201,111,74,0.18)' },
+  'series-2':{ name:'系列名称二', pages:['封面 Cover','内页 01','内页 02','内页 03','结尾'], color:'rgba(126,140,107,0.18)' },
+  'series-3':{ name:'系列名称三', pages:['封面 Cover','内页 01','内页 02','结尾'], color:'rgba(124,147,166,0.18)' },
+  'series-4':{ name:'系列名称四', pages:['封面 Cover','内页 01','内页 02','内页 03','内页 04','内页 05','结尾'], color:'rgba(234,139,100,0.15)' },
+};
+function openSeriesLightbox(id){
+  const data = seriesData[id];
+  document.getElementById('slb-title').textContent = data.name;
+  const sizes = ['h-tall','h-mid','h-tall','h-short','h-mid','h-tall','h-short'];
+  const inner = document.getElementById('slb-inner');
+  inner.innerHTML = data.pages.map((p,i) =>
+    `<div class="slb-img ${sizes[i%sizes.length]}" style="background:${data.color}">${p} — 替换为真实图片</div>`
+  ).join('');
+  document.getElementById('series-lb').classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+}
+function closeSeriesLightbox(){
+  document.getElementById('series-lb').classList.remove('is-open');
+  document.body.style.overflow = '';
+}
+
 /* ── Photography lightbox ── */
 function openLightbox(item){
   document.getElementById('lightbox').classList.add('is-open');
@@ -1038,7 +1575,7 @@ function closeLightbox(){
   document.getElementById('lightbox').classList.remove('is-open');
 }
 document.addEventListener('keydown', e => {
-  if(e.key === 'Escape') closeLightbox();
+  if(e.key === 'Escape'){ closeLightbox(); closeSeriesLightbox(); }
 });
 </script>
 
